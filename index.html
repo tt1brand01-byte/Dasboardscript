@@ -407,6 +407,15 @@ main{flex:1;padding:30px 34px 60px;max-width:1180px;}
             <div class="section-title">💾 Data Lokal</div>
             <p class="msub" id="localDataCount" style="margin:0;">0 script tersimpan di perangkat ini.</p>
           </div>
+          <div class="card">
+            <div class="section-title">📱 Kelola Platform</div>
+            <p class="msub">Tambah atau hapus pilihan platform yang muncul di filter &amp; form.</p>
+            <div class="field-row">
+              <input type="text" id="newPlatformInput" placeholder="Nama platform baru, mis. Facebook" style="flex:1;">
+              <button class="btn btn-primary" id="btnAddPlatform" style="flex-shrink:0;">＋ Tambah</button>
+            </div>
+            <div id="platformManageList" style="margin-top:12px;display:flex;flex-wrap:wrap;gap:8px;"></div>
+          </div>
         </div>
         <div class="card">
           <div class="section-title">📘 Panduan Setup (sekali saja)</div>
@@ -485,12 +494,7 @@ main{flex:1;padding:30px 34px 60px;max-width:1180px;}
             </div>
             <div class="field">
               <label>Platform</label>
-              <select id="fPlatform">
-                <option>TikTok</option>
-                <option>Instagram</option>
-                <option>YouTube</option>
-                <option>Lainnya</option>
-              </select>
+              <select id="fPlatform"></select>
             </div>
           </div>
           <div class="field">
@@ -670,11 +674,13 @@ function findRowById_(sh, id){
 `;
 
 /* ============ CONFIG ============ */
-const PLATFORMS = ['TikTok','Instagram','YouTube','Lainnya'];
+const DEFAULT_PLATFORMS = ['TikTok','Instagram','YouTube','Facebook','Lainnya'];
+let PLATFORMS = [];
 const STATUSES = [
   {key:'Draft',    color:'#94A3B8'},
   {key:'Review',   color:'#F2B134'},
   {key:'Approved', color:'#3E92CC'},
+  {key:'Ditolak',  color:'#E0546B'},
   {key:'Tayang',   color:'#2BAE66'}
 ];
 const STATUS_COLOR = Object.fromEntries(STATUSES.map(s=>[s.key,s.color]));
@@ -686,7 +692,7 @@ let SCRIPTS = [];              // {id,judul,platform,status,tanggal,jam,catatan,
 let today = new Date();
 let viewYear = today.getFullYear();
 let viewMonth = today.getMonth(); // 0-indexed
-let activePlatforms = new Set(PLATFORMS);
+let activePlatforms = new Set();
 let activeStatuses  = new Set(STATUSES.map(s=>s.key));
 let deactivatedPenulis = new Set(); // nama penulis yang di-nonaktifkan dari filter (default: semua aktif)
 let searchText = '';
@@ -791,6 +797,69 @@ function renderPlatformFilters(){
     };
   });
 }
+function renderPlatformSelect(){
+  const sel = document.getElementById('fPlatform');
+  const current = sel.value;
+  sel.innerHTML = PLATFORMS.map(p=>`<option>${esc(p)}</option>`).join('');
+  if(PLATFORMS.includes(current)) sel.value = current;
+}
+
+/* ============ KELOLA PLATFORM (localStorage) ============ */
+function loadPlatforms(){
+  try{
+    const raw = localStorage.getItem('skPlatforms');
+    PLATFORMS = raw ? JSON.parse(raw) : DEFAULT_PLATFORMS.slice();
+    if(!Array.isArray(PLATFORMS) || !PLATFORMS.length) PLATFORMS = DEFAULT_PLATFORMS.slice();
+  }catch(e){ PLATFORMS = DEFAULT_PLATFORMS.slice(); }
+  activePlatforms = new Set(PLATFORMS);
+}
+function savePlatforms(){
+  try{ localStorage.setItem('skPlatforms', JSON.stringify(PLATFORMS)); }catch(e){}
+}
+function refreshPlatformUI(){
+  renderPlatformFilters();
+  renderPlatformSelect();
+  renderPlatformManageList();
+}
+function renderPlatformManageList(){
+  const box = document.getElementById('platformManageList');
+  if(!box) return;
+  box.innerHTML = PLATFORMS.map(p=>`
+    <span class="tag tag-platform" style="display:inline-flex;align-items:center;gap:6px;">
+      ${esc(p)}
+      <button type="button" data-remove="${esc(p)}" style="background:none;border:none;cursor:pointer;color:inherit;font-size:13px;line-height:1;padding:0;">✕</button>
+    </span>
+  `).join('');
+  box.querySelectorAll('[data-remove]').forEach(btn=>{
+    btn.onclick = ()=>{
+      const p = btn.dataset.remove;
+      if(PLATFORMS.length <= 1){ toast('Minimal harus ada 1 platform'); return; }
+      if(!confirm(`Hapus platform "${p}"? Script yang sudah pakai platform ini tidak akan berubah.`)) return;
+      PLATFORMS = PLATFORMS.filter(x=>x!==p);
+      activePlatforms.delete(p);
+      savePlatforms();
+      refreshPlatformUI();
+      renderCalendar();
+      toast(`Platform "${p}" dihapus`);
+    };
+  });
+}
+document.getElementById('btnAddPlatform').onclick = ()=>{
+  const input = document.getElementById('newPlatformInput');
+  const val = input.value.trim();
+  if(!val){ toast('Nama platform tidak boleh kosong'); return; }
+  if(PLATFORMS.some(p=>p.toLowerCase()===val.toLowerCase())){ toast('Platform itu sudah ada'); return; }
+  PLATFORMS.push(val);
+  activePlatforms.add(val);
+  savePlatforms();
+  refreshPlatformUI();
+  input.value = '';
+  toast(`Platform "${val}" ditambahkan`);
+};
+document.getElementById('newPlatformInput').addEventListener('keydown', (e)=>{
+  if(e.key === 'Enter'){ e.preventDefault(); document.getElementById('btnAddPlatform').click(); }
+});
+
 function renderStatusFilters(){
   const box = document.getElementById('statusFilters');
   box.innerHTML = STATUSES.map(s=>`
@@ -1055,7 +1124,7 @@ function renderTicker(){
   const soonStr = fmtISO(soon);
 
   const relevant = SCRIPTS.filter(s=>{
-    return s.tanggal && s.status !== 'Tayang' && s.tanggal <= soonStr;
+    return s.tanggal && s.status !== 'Tayang' && s.status !== 'Ditolak' && s.tanggal <= soonStr;
   }).sort((a,b)=> (a.tanggal+((a.jam)||'')).localeCompare(b.tanggal+((b.jam)||'')));
 
   if(!relevant.length){
@@ -1249,7 +1318,10 @@ function renderConnBanner(state){
 /* ============ INIT ============ */
 async function init(){
   loadLocalCache();
+  loadPlatforms();
   renderPlatformFilters();
+  renderPlatformSelect();
+  renderPlatformManageList();
   renderStatusFilters();
   refreshAll();
   document.getElementById('localDataCount').textContent = SCRIPTS.length + ' script tersimpan di perangkat ini.';
