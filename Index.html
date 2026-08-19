@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Script Konten</title>
+<link rel="preconnect" href="https://fonts.googleapis.com/">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0F3A5C; --navy-2:#123F63; --navy-3:#1B5580; --navy-line:rgba(255,255,255,.12);
+  --canvas-1:#EAF2FA; --canvas-2:#F8FBFD;
+  --white:#FFFFFF; --ink:#16324A; --muted:#6D859C; --line:#DBE7F2; --line-soft:#EAF1F8;
+  --accent:#2D7DD2; --accent-dark:#1F5FA8; --accent-soft:#E4F0FC;
+  --draft:#94A3B8; --review:#F2B134; --approved:#3E92CC; --tayang:#2BAE66;
+  --shadow:0 18px 40px rgba(15,58,92,.10);
+  --radius:16px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:'Inter',sans-serif; color:var(--ink); font-size:14px;
+  background:linear-gradient(160deg,var(--canvas-1),var(--canvas-2) 55%);
+  min-height:100vh;
+}
+h1,h2,h3,.disp{font-family:'Poppins',sans-serif;}
+button{font-family:inherit;cursor:pointer;}
+input,select,textarea{font-family:inherit;}
+::-webkit-scrollbar{width:8px;height:8px;}
+::-webkit-scrollbar-thumb{background:#C6D8E8;border-radius:4px;}
+
+.app{display:flex;min-height:100vh;}
+
+/* ============ SIDEBAR ============ */
+.sidebar{
+  width:296px;flex-shrink:0;background:linear-gradient(185deg,var(--navy),var(--navy-2) 70%);
+  color:#fff;padding:28px 22px 22px;display:flex;flex-direction:column;gap:26px;
+  position:sticky;top:0;height:100vh;overflow-y:auto;
+}
+.brand{display:flex;align-items:center;gap:11px;}
+.brand-mark{
+  width:40px;height:40px;border-radius:11px;background:rgba(255,255,255,.14);
+  display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0;
+}
+.brand-text .name{font-family:'Poppins',sans-serif;font-weight:700;font-size:15.5px;letter-spacing:.01em;line-height:1.25;}
+.brand-text .sub{font-size:10px;color:rgba(255,255,255,.55);letter-spacing:.09em;text-transform:uppercase;margin-top:2px;}
+
+.month-nav{
+  display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.07);
+  border:1px solid var(--navy-line);border-radius:12px;padding:6px 8px;
+}
+.month-nav button{
+  width:30px;height:30px;border-radius:8px;border:none;background:none;color:#fff;font-size:15px;
+  display:flex;align-items:center;justify-content:center;
+}
+.month-nav button:hover{background:rgba(255,255,255,.14);}
+.month-nav .label{font-family:'Poppins',sans-serif;font-weight:600;font-size:13.5px;}
+
+.side-block .side-title{
+  font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:rgba(255,255,255,.5);margin-bottom:11px;
+}
+
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
+.stat-card{
+  background:rgba(255,255,255,.07);border:1px solid var(--navy-line);border-radius:12px;padding:11px 12px;
+}
+.stat-card .num{font-family:'Poppins',sans-serif;font-weight:700;font-size:20px;line-height:1;}
+.stat-card .lbl{font-size:10.5px;color:rgba(255,255,255,.6);margin-top:6px;display:flex;align-items:center;gap:6px;}
+.dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+
+.pill-group{display:flex;flex-wrap:wrap;gap:7px;}
+
+/* avatar penulis (dipakai di badge kalender & kartu tiket) */
+.rekap-avatar{width:19px;height:19px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  font-size:9.5px;font-weight:800;color:#0F3A5C;}
+.rekap-empty{font-size:11.5px;color:rgba(255,255,255,.45);line-height:1.5;}
+.pill{
+  padding:7px 13px;border-radius:20px;border:1px solid var(--navy-line);background:rgba(255,255,255,.06);
+  color:rgba(255,255,255,.78);font-size:12px;font-weight:600;display:flex;align-items:center;gap:6px;
+}
+.pill.active{background:#fff;color:var(--navy);border-color:#fff;}
+.pill .dot{width:7px;height:7px;}
+
+.side-spacer{flex:1;}
+.side-foot-btn{
+  display:flex;align-items:center;gap:9px;background:rgba(255,255,255,.07);border:1px solid var(--navy-line);
+  color:#fff;border-radius:11px;padding:11px 13px;font-size:12.5px;font-weight:600;
+}
+.side-foot-btn:hover{background:rgba(255,255,255,.13);}
+.sync-note{font-size:10.5px;color:rgba(255,255,255,.45);text-align:center;font-family:'Inter',monospace;}
+
+/* ============ MAIN ============ */
+main{flex:1;padding:30px 34px 60px;max-width:1180px;}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:22px;}
+.topbar h1{font-size:21px;font-weight:700;color:var(--ink);}
+.topbar .crumb{font-size:12px;color:var(--muted);margin-top:3px;}
+.top-actions{display:flex;align-items:center;gap:10px;}
+.search-box{
+  display:flex;align-items:center;gap:8px;background:var(--white);border:1px solid var(--line);
+  border-radius:11px;padding:9px 14px;min-width:220px;
+}
+.search-box input{border:none;outline:none;font-size:13px;width:100%;color:var(--ink);background:none;}
+.search-box input::placeholder{color:#A9BDCF;}
+.btn{
+  border:none;border-radius:11px;padding:10px 18px;font-size:13px;font-weight:700;display:inline-flex;
+  align-items:center;gap:8px;white-space:nowrap;
+}
+.btn-primary{background:var(--accent);color:#fff;box-shadow:0 10px 22px rgba(45,125,210,.28);}
+.btn-primary:hover{background:var(--accent-dark);}
+.btn-ghost{background:var(--white);color:var(--ink);border:1px solid var(--line);}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent-dark);}
+
+/* ===== Calendar card ===== */
+.cal-card{
+  background:var(--white);border-radius:20px;box-shadow:var(--shadow);border:1px solid var(--line-soft);
+  padding:22px 22px 10px;
+}
+.cal-dow{display:grid;grid-template-columns:repeat(7,1fr);gap:0;margin-bottom:6px;}
+.cal-dow div{text-align:center;font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--muted);
+  text-transform:uppercase;padding:8px 0;}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;padding-bottom:14px;}
+.cal-cell{
+  min-height:96px;border-radius:13px;border:1px solid var(--line-soft);padding:9px 9px 8px;
+  display:flex;flex-direction:column;gap:6px;background:var(--canvas-2);
+}
+.cal-cell.pad{background:transparent;border-color:transparent;}
+.cal-cell.clickable{cursor:pointer;}
+.cal-cell.clickable:hover{border-color:var(--accent);background:var(--accent-soft);}
+.cal-cell.today{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset;}
+.cal-cell .daynum{font-family:'Poppins',sans-serif;font-weight:700;font-size:13px;color:var(--ink);}
+.cal-cell.today .daynum{color:var(--accent-dark);}
+.cal-badges{display:flex;flex-direction:column;gap:4px;}
+.cal-badge{
+  font-size:10.5px;font-weight:600;padding:3px 7px;border-radius:6px;color:#fff;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:flex;align-items:center;gap:5px;
+}
+.cal-badge .t{font-family:'Inter',monospace;opacity:.85;font-size:9.5px;flex-shrink:0;}
+.cal-more{font-size:10px;color:var(--muted);font-weight:600;padding-left:2px;}
+
+@media (max-width:920px){
+  .app{flex-direction:column;}
+  .sidebar{width:100%;height:auto;position:relative;}
+  main{padding:22px 16px 50px;}
+  .cal-cell{min-height:74px;}
+}
+
+/* ============ OVERLAY / DRAWER ============ */
+.overlay{
+  position:fixed;inset:0;background:rgba(15,45,70,.42);backdrop-filter:blur(2px);
+  display:none;align-items:stretch;justify-content:flex-end;z-index:100;
+}
+.overlay.open{display:flex;}
+.drawer{
+  width:min(430px,100vw);background:var(--white);height:100vh;overflow-y:auto;
+  box-shadow:-20px 0 50px rgba(15,45,70,.18);display:flex;flex-direction:column;
+}
+.drawer-head{
+  background:linear-gradient(120deg,var(--navy),var(--navy-3));color:#fff;padding:22px 24px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.drawer-head .dtitle{font-family:'Poppins',sans-serif;font-weight:700;font-size:16px;}
+.drawer-head .dsub{font-size:11.5px;color:rgba(255,255,255,.65);margin-top:3px;}
+.drawer-close{
+  width:32px;height:32px;border-radius:9px;border:none;background:rgba(255,255,255,.14);color:#fff;font-size:16px;
+}
+.drawer-close:hover{background:rgba(255,255,255,.24);}
+.drawer-body{padding:20px 22px 30px;display:flex;flex-direction:column;gap:16px;}
+
+/* ticket-style card, echoing the reference image's time-slot cards */
+.ticket{
+  border:1.5px solid var(--line);border-radius:14px;padding:14px 15px;display:flex;gap:13px;align-items:flex-start;
+  position:relative;background:var(--canvas-2);
+}
+.ticket .clock{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:var(--white);border:1px solid var(--line);border-radius:11px;padding:9px 10px;min-width:66px;flex-shrink:0;
+}
+.ticket .clock .time{font-family:'Poppins',sans-serif;font-weight:700;font-size:15px;color:var(--ink);}
+.ticket .clock .ic{font-size:13px;margin-bottom:2px;}
+.ticket-main{flex:1;min-width:0;}
+.ticket-main .title{font-family:'Poppins',sans-serif;font-weight:600;font-size:13.5px;color:var(--ink);
+  overflow-wrap:break-word;}
+.ticket-tags{display:flex;gap:6px;margin-top:7px;flex-wrap:wrap;}
+.tag{font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:20px;display:inline-flex;align-items:center;gap:5px;}
+.tag-platform{background:var(--accent-soft);color:var(--accent-dark);}
+.tag-status{color:#fff;}
+.ticket-note{font-size:11.5px;color:var(--muted);margin-top:7px;line-height:1.5;}
+.ticket-actions{display:flex;gap:6px;margin-top:10px;}
+.mini-btn{
+  border:1px solid var(--line);background:var(--white);border-radius:8px;padding:5px 10px;font-size:11px;
+  font-weight:700;color:var(--ink);
+}
+.mini-btn:hover{border-color:var(--accent);color:var(--accent-dark);}
+.mini-btn.danger:hover{border-color:#E0546B;color:#E0546B;}
+.empty-note{
+  text-align:center;color:var(--muted);font-size:12.5px;padding:26px 10px;border:1.5px dashed var(--line);
+  border-radius:14px;
+}
+
+/* Form */
+.form-block{border-top:1px solid var(--line-soft);padding-top:16px;margin-top:2px;}
+.form-block .ftitle{font-family:'Poppins',sans-serif;font-weight:700;font-size:13.5px;margin-bottom:12px;}
+.field{margin-bottom:12px;}
+.field label{display:block;font-size:11.5px;font-weight:700;color:var(--muted);margin-bottom:6px;}
+.field input,.field select,.field textarea{
+  width:100%;background:var(--canvas-2);border:1px solid var(--line);border-radius:10px;padding:10px 12px;
+  font-size:13px;color:var(--ink);outline:none;
+}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--accent);background:var(--white);}
+.field textarea{resize:vertical;min-height:64px;}
+.field-row{display:flex;gap:10px;}
+.field-row .field{flex:1;}
+.status-choice{display:flex;gap:7px;flex-wrap:wrap;}
+.status-opt{
+  flex:1;min-width:80px;text-align:center;padding:9px 6px;border-radius:9px;border:1.5px solid var(--line);
+  font-size:11.5px;font-weight:700;color:var(--muted);background:var(--canvas-2);
+}
+.status-opt.active{color:#fff;border-color:transparent;}
+.form-actions{display:flex;gap:9px;margin-top:4px;}
+.form-actions .btn{flex:1;justify-content:center;}
+
+/* Tabs (topbar) */
+.tabs{display:flex;gap:6px;}
+.tab-btn{
+  background:var(--white);border:1px solid var(--line);color:var(--ink);
+  padding:9px 15px;border-radius:11px;font-size:12.5px;cursor:pointer;font-weight:700;
+}
+.tab-btn:hover{border-color:var(--accent);color:var(--accent-dark);}
+.tab-btn.active{background:var(--accent);color:#fff;border-color:var(--accent);}
+
+/* Connection banner */
+.conn-banner{
+  display:flex;align-items:center;gap:10px;background:var(--white);border:1px solid var(--line-soft);
+  border-radius:12px;padding:11px 15px;margin-bottom:16px;font-size:12.5px;color:var(--muted);box-shadow:var(--shadow);
+}
+.conn-banner .cdot{width:8px;height:8px;border-radius:50%;flex-shrink:0;background:var(--muted);}
+.conn-banner.ok .cdot{background:var(--tayang);}
+.conn-banner.warn .cdot{background:var(--review);}
+.conn-banner b{color:var(--ink);}
+
+/* Settings panel (tab) */
+.settings-grid{display:grid;grid-template-columns:360px 1fr;gap:16px;align-items:start;}
+@media (max-width:920px){.settings-grid{grid-template-columns:1fr;}}
+.card{
+  background:var(--white);border-radius:18px;box-shadow:var(--shadow);border:1px solid var(--line-soft);
+  padding:20px 22px;margin-bottom:16px;
+}
+.card h3{font-family:'Poppins',sans-serif;font-size:15px;margin-bottom:4px;}
+.card .msub{font-size:12px;color:var(--muted);margin-bottom:14px;}
+.card .msg-line{font-size:12px;margin-top:9px;min-height:16px;}
+.section-title{font-family:'Poppins',sans-serif;font-size:14px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.guide-step{display:flex;gap:12px;margin-bottom:20px;}
+.guide-step:last-child{margin-bottom:0;}
+.guide-step .num{
+  flex-shrink:0;width:26px;height:26px;border-radius:50%;background:var(--accent);
+  color:#fff;font-size:12.5px;font-weight:700;display:flex;align-items:center;justify-content:center;
+}
+.guide-step .body h4{font-family:'Poppins',sans-serif;margin:2px 0 6px;font-size:13.5px;color:var(--ink);}
+.guide-step .body p{margin:0 0 8px;font-size:12.5px;color:var(--muted);line-height:1.55;}
+.code-box{
+  background:var(--navy);color:#DCEBF8;border-radius:10px;padding:13px 14px;font-size:10.5px;
+  font-family:'DM Mono','Inter',monospace;max-height:280px;overflow-y:auto;line-height:1.6;margin:8px 0 4px;
+  white-space:pre-wrap;word-break:break-word;
+}
+.badge{display:inline-block;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:700;}
+.badge.ok{background:#E4F8ED;color:#1F8A50;}
+.badge.warn{background:#FDEAEE;color:#C33A55;}
+
+/* Running text (ticker) pengingat */
+.ticker{
+  background:rgba(224,90,78,.10);border-bottom:1px solid var(--line);
+  overflow:hidden;position:relative;z-index:19;display:flex;align-items:center;
+}
+.ticker.is-empty{display:none;}
+.ticker-label{
+  flex-shrink:0;background:#E0546B;color:#fff;font-size:11px;font-weight:800;
+  padding:7px 12px;letter-spacing:.3px;white-space:nowrap;
+}
+.ticker-track{flex:1;overflow:hidden;white-space:nowrap;position:relative;height:28px;}
+.ticker-track .ticker-content{
+  display:inline-block;padding-left:100%;animation:ticker-scroll 28s linear infinite;
+  line-height:28px;font-size:12px;font-weight:600;color:var(--ink);
+}
+.ticker-track .ticker-content span{margin-right:42px;}
+.ticker-track .ticker-content span.due-today{color:#B8860B;}
+.ticker-track .ticker-content span.overdue{color:#C33A55;}
+@keyframes ticker-scroll{0%{transform:translateX(0);}100%{transform:translateX(-100%);}}
+.ticker-track:hover .ticker-content{animation-play-state:paused;}
+
+/* List Harian (sidebar) */
+.daily-list{display:flex;flex-direction:column;gap:7px;}
+.daily-item{
+  display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.07);
+  border:1px solid var(--navy-line);border-radius:10px;padding:8px 10px;cursor:pointer;
+}
+.daily-item:hover{background:rgba(255,255,255,.13);}
+.daily-item .dtime{font-family:'Inter',monospace;font-size:10.5px;color:rgba(255,255,255,.6);flex-shrink:0;min-width:34px;}
+.daily-item .dtitle{font-size:11.5px;color:#fff;font-weight:600;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.daily-item .ddot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.toast{
+  position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;
+  padding:11px 20px;border-radius:11px;font-size:12.5px;font-weight:600;box-shadow:0 14px 30px rgba(0,0,0,.25);
+  z-index:300;display:none;
+}
+.toast.show{display:block;}
+</style>
+</head>
+<body>
+<div class="ticker is-empty" id="tickerBar">
+  <div class="ticker-label">⏰ PENGINGAT</div>
+  <div class="ticker-track"><div class="ticker-content" id="tickerContent"></div></div>
+</div>
+<div class="app">
+
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark">🗓️</div>
+      <div class="brand-text">
+        <div class="name">Script Konten</div>
+        <div class="sub">Content Calendar</div>
+      </div>
+    </div>
+
+    <div class="month-nav">
+      <button id="prevMonth">‹</button>
+      <div class="label" id="monthLabel">Juli 2026</div>
+      <button id="nextMonth">›</button>
+    </div>
+
+    <div class="side-block">
+      <div class="side-title">📌 List Harian (Hari Ini)</div>
+      <div class="daily-list" id="dailyList"></div>
+    </div>
+
+    <div class="side-block">
+      <div class="side-title">Ringkasan Bulan Ini</div>
+      <div class="stat-grid" id="statGrid"></div>
+    </div>
+
+    <div class="side-block">
+      <div class="side-title">Penulis</div>
+      <div class="pill-group" id="penulisFilters"></div>
+    </div>
+
+    <div class="side-block">
+      <div class="side-title">Platform</div>
+      <div class="pill-group" id="platformFilters"></div>
+    </div>
+
+    <div class="side-block">
+      <div class="side-title">Status</div>
+      <div class="pill-group" id="statusFilters"></div>
+    </div>
+
+    <div class="side-spacer"></div>
+
+    <button class="side-foot-btn" id="btnSettings">⚙️ &nbsp;Pengaturan &amp; Panduan</button>
+    <div class="sync-note" id="syncNote">Belum tersambung ke Google Sheet</div>
+  </aside>
+
+  <!-- ============ MAIN ============ -->
+  <main>
+    <div class="topbar">
+      <div>
+        <h1>Kalender Script Konten</h1>
+        <div class="crumb" id="topCrumb">Klik salah satu tanggal untuk lihat / tambah script konten hari itu</div>
+      </div>
+      <div class="top-actions">
+        <div class="tabs">
+          <button class="tab-btn active" id="tabCalBtn">🗓️ Kalender</button>
+          <button class="tab-btn" id="tabSettingsBtn">⚙️ Pengaturan &amp; Panduan</button>
+        </div>
+        <button class="btn btn-ghost" id="btnRefresh" title="Tarik data terbaru dari Google Sheets">🔄 Refresh</button>
+      </div>
+    </div>
+
+    <div id="calendarView">
+      <div id="connBanner"></div>
+      <div class="topbar" style="margin-bottom:14px;">
+        <div class="search-box">🔍<input id="searchInput" type="text" placeholder="Cari judul script..."></div>
+        <button class="btn btn-primary" id="btnAddToday">＋ Tambah Script</button>
+      </div>
+      <div class="cal-card">
+        <div class="cal-dow">
+          <div>Min</div><div>Sen</div><div>Sel</div><div>Rab</div><div>Kam</div><div>Jum</div><div>Sab</div>
+        </div>
+        <div class="cal-grid" id="calGrid"></div>
+      </div>
+    </div>
+
+    <div id="settingsView" style="display:none;">
+      <div class="settings-grid">
+        <div>
+          <div class="card">
+            <h3>🔗 Koneksi Google Sheets</h3>
+            <div class="msub">Tempel URL Web App Apps Script dari Google Sheet kamu di sini.</div>
+            <div class="field">
+              <label>URL Web App Apps Script</label>
+              <input type="text" id="gasUrl" placeholder="https://script.google.com/macros/s/XXXX/exec">
+            </div>
+            <button class="btn btn-primary" id="btnSaveUrl">Simpan &amp; Hubungkan</button>
+            <div class="msg-line" id="settingsMsg"></div>
+          </div>
+          <div class="card">
+            <div class="section-title">💾 Data Lokal</div>
+            <p class="msub" id="localDataCount" style="margin:0;">0 script tersimpan di perangkat ini.</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="section-title">📘 Panduan Setup (sekali saja)</div>
+          <div class="guide-step">
+            <div class="num">1</div>
+            <div class="body">
+              <h4>Buat Google Sheet baru</h4>
+              <p>Boleh spreadsheet kosong — sheet "ScriptKonten" dengan header akan dibuat otomatis oleh script di langkah berikutnya.</p>
+            </div>
+          </div>
+          <div class="guide-step">
+            <div class="num">2</div>
+            <div class="body">
+              <h4>Buka Apps Script</h4>
+              <p>Di spreadsheet: menu <b>Extensions → Apps Script</b>. Hapus kode default, lalu tempel kode di bawah ini.</p>
+              <div class="code-box" id="codeGsBox"></div>
+              <button type="button" class="btn btn-ghost" id="btnCopyCode" style="width:100%;justify-content:center;margin-top:9px;">📋 Salin Kode Code.gs</button>
+            </div>
+          </div>
+          <div class="guide-step">
+            <div class="num">3</div>
+            <div class="body">
+              <h4>Deploy sebagai Web App</h4>
+              <p>Klik <b>Deploy → New deployment</b> → pilih tipe <b>Web app</b>. Isi "Execute as: Me" dan "Who has access: Anyone". Klik Deploy, izinkan akses, lalu salin URL yang muncul.</p>
+            </div>
+          </div>
+          <div class="guide-step">
+            <div class="num">4</div>
+            <div class="body">
+              <h4>Tempel URL di sini</h4>
+              <p>Paste URL hasil deploy ke kolom "URL Web App Apps Script" di sebelah kiri, lalu klik <b>Simpan &amp; Hubungkan</b>. Setelah itu semua script otomatis tersinkron dua arah.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- ============ DAY DRAWER ============ -->
+<div class="overlay" id="dayOverlay">
+  <div class="drawer">
+    <div class="drawer-head">
+      <div>
+        <div class="dtitle" id="drawerTitle">Selasa, 30 Juli 2026</div>
+        <div class="dsub" id="drawerSub">0 script terjadwal</div>
+      </div>
+      <button class="drawer-close" id="drawerClose">✕</button>
+    </div>
+    <div class="drawer-body">
+      <div id="ticketList"></div>
+
+      <div class="form-block">
+        <div class="ftitle" id="formTitle">➕ Tambah Script Baru</div>
+        <form id="scriptForm">
+          <input type="hidden" id="fId">
+          <div class="field">
+            <label>Judul / Topik Script</label>
+            <input type="text" id="fJudul" placeholder="Misal: Review produk skincare X" required>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label>Tanggal Posting</label>
+              <input type="date" id="fTanggal" required>
+            </div>
+            <div class="field">
+              <label>Jam Tayang</label>
+              <input type="time" id="fJam" value="09:00">
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label>Penulis</label>
+              <input type="text" id="fPenulis" list="penulisList" placeholder="Nama penulis script">
+              <datalist id="penulisList"></datalist>
+            </div>
+            <div class="field">
+              <label>Platform</label>
+              <select id="fPlatform">
+                <option>TikTok</option>
+                <option>Instagram</option>
+                <option>YouTube</option>
+                <option>Lainnya</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label>Status</label>
+            <div class="status-choice" id="statusChoice"></div>
+          </div>
+          <div class="field">
+            <label>Catatan / Isi Script (opsional)</label>
+            <textarea id="fCatatan" placeholder="Poin-poin script, hook, CTA, dll (opsional)"></textarea>
+          </div>
+          <div class="form-actions">
+            <button type="button" class="btn btn-ghost" id="btnCancelForm">Batal</button>
+            <button type="submit" class="btn btn-primary" id="btnSaveForm">Simpan Script</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============ CODE.GS EMBEDDED (untuk kotak salin di modal Pengaturan) ============ */
+const CODE_GS = `/**
+ * DASHBOARD SCRIPT KONTEN — Apps Script Backend
+ * ------------------------------------------------
+ * Cara pakai:
+ * 1. Buka Google Sheet baru (khusus untuk dashboard ini, terpisah dari sheet lain).
+ * 2. Extensions > Apps Script, hapus isi default, tempel SELURUH kode ini.
+ * 3. Klik Deploy > New deployment > pilih tipe "Web app".
+ *      - Execute as: Me
+ *      - Who has access: Anyone
+ * 4. Copy URL Web App yang dihasilkan (diakhiri /exec), tempel ke field
+ *    "URL Web App Apps Script" di menu Pengaturan pada dashboard HTML.
+ *
+ * Sheet "ScriptKonten" akan dibuat otomatis kalau belum ada, dengan kolom:
+ * id | judul | penulis | platform | status | tanggal | jam | catatan | createdAt | updatedAt
+ */
+
+const SHEET_NAME = 'ScriptKonten';
+const HEADERS = ['id','judul','penulis','platform','status','tanggal','jam','catatan','createdAt','updatedAt'];
+
+function getSheet_(){
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let sh = ss.getSheetByName(SHEET_NAME);
+  if(!sh){
+    sh = ss.insertSheet(SHEET_NAME);
+    sh.appendRow(HEADERS);
+    sh.setFrozenRows(1);
+  }
+  // Pastikan header lengkap kalau sheet sudah ada tapi kolom belum sesuai
+  const firstRow = sh.getRange(1,1,1,HEADERS.length).getValues()[0];
+  if(firstRow.join('|') !== HEADERS.join('|')){
+    sh.getRange(1,1,1,HEADERS.length).setValues([HEADERS]);
+  }
+  return sh;
+}
+
+function jsonOut_(obj){
+  return ContentService.createTextOutput(JSON.stringify(obj))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+function doGet(e){
+  try{
+    const action = (e.parameter.action || 'read');
+
+    if(action === 'test'){
+      const sh = getSheet_();
+      const rows = Math.max(0, sh.getLastRow()-1);
+      return jsonOut_({status:'ok', rowCounts:{ ScriptKonten: sh.getLastRow() }, message:'Koneksi berhasil. '+rows+' baris data.'});
+    }
+
+    if(action === 'read'){
+      const sh = getSheet_();
+      const lastRow = sh.getLastRow();
+      if(lastRow < 2) return jsonOut_({status:'ok', items:[]});
+      const values = sh.getRange(2,1,lastRow-1,HEADERS.length).getValues();
+      const items = values
+        .filter(r => r[0] !== '') // buang baris kosong
+        .map(r => {
+          const o = {};
+          HEADERS.forEach((h,i)=>{
+            let v = r[i];
+            if(v instanceof Date){
+              // tanggal -> yyyy-MM-dd, createdAt/updatedAt -> ISO string
+              v = (h==='tanggal') ? Utilities.formatDate(v, Session.getScriptTimeZone(), 'yyyy-MM-dd') : v.toISOString();
+            }
+            o[h] = v;
+          });
+          return o;
+        });
+      return jsonOut_({status:'ok', items});
+    }
+
+    return jsonOut_({status:'error', message:'Action tidak dikenali: '+action});
+  }catch(err){
+    return jsonOut_({status:'error', message:String(err)});
+  }
+}
+
+// Semua tulis (create/update/delete) lewat POST body JSON — dikirim dashboard
+// dengan Content-Type: text/plain supaya tidak kena CORS preflight di browser.
+function doPost(e){
+  const lock = LockService.getScriptLock();
+  try{
+    lock.waitLock(30000);
+  }catch(lockErr){
+    return jsonOut_({status:'error', message:'Server sibuk, coba lagi.'});
+  }
+  try{
+    const data = JSON.parse(e.postData.contents);
+    return jsonOut_(handleWrite_(data));
+  }catch(err){
+    return jsonOut_({status:'error', message:String(err)});
+  }finally{
+    lock.releaseLock();
+  }
+}
+
+function handleWrite_(data){
+  const sh = getSheet_();
+  const op = data.op; // 'create' | 'update' | 'delete'
+  const now = new Date().toISOString();
+
+  if(op === 'create'){
+    const id = 'sk_' + Date.now() + '_' + Math.floor(Math.random()*1000);
+    sh.appendRow([
+      id,
+      data.judul || '',
+      data.penulis || '',
+      data.platform || '',
+      data.status || 'Draft',
+      data.tanggal || '',
+      data.jam || '',
+      data.catatan || '',
+      now,
+      now
+    ]);
+    return {status:'ok', op:'create', id};
+  }
+
+  if(op === 'update'){
+    const rowIdx = findRowById_(sh, data.id);
+    if(rowIdx === -1) return {status:'error', message:'ID tidak ditemukan: '+data.id};
+    const row = sh.getRange(rowIdx,1,1,HEADERS.length).getValues()[0];
+    const map = {};
+    HEADERS.forEach((h,i)=> map[h] = row[i]);
+    ['judul','penulis','platform','status','tanggal','jam','catatan'].forEach(f=>{
+      if(data[f] !== undefined) map[f] = data[f];
+    });
+    map.updatedAt = now;
+    sh.getRange(rowIdx,1,1,HEADERS.length).setValues([HEADERS.map(h=>map[h])]);
+    return {status:'ok', op:'update', id:data.id};
+  }
+
+  if(op === 'delete'){
+    const rowIdx = findRowById_(sh, data.id);
+    if(rowIdx === -1) return {status:'error', message:'ID tidak ditemukan: '+data.id};
+    sh.deleteRow(rowIdx);
+    return {status:'ok', op:'delete', id:data.id};
+  }
+
+  return {status:'error', message:'op tidak dikenali: '+op};
+}
+
+function findRowById_(sh, id){
+  const lastRow = sh.getLastRow();
+  if(lastRow < 2) return -1;
+  const ids = sh.getRange(2,1,lastRow-1,1).getValues();
+  for(let i=0;i<ids.length;i++){
+    if(ids[i][0] === id) return i+2;
+  }
+  return -1;
+}
+`;
+
+/* ============ CONFIG ============ */
+const PLATFORMS = ['TikTok','Instagram','YouTube','Lainnya'];
+const STATUSES = [
+  {key:'Draft',    color:'#94A3B8'},
+  {key:'Review',   color:'#F2B134'},
+  {key:'Approved', color:'#3E92CC'},
+  {key:'Tayang',   color:'#2BAE66'}
+];
+const STATUS_COLOR = Object.fromEntries(STATUSES.map(s=>[s.key,s.color]));
+const BULAN = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+const HARI  = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+
+/* ============ STATE ============ */
+let SCRIPTS = [];              // {id,judul,platform,status,tanggal,jam,catatan,createdAt,updatedAt}
+let today = new Date();
+let viewYear = today.getFullYear();
+let viewMonth = today.getMonth(); // 0-indexed
+let activePlatforms = new Set(PLATFORMS);
+let activeStatuses  = new Set(STATUSES.map(s=>s.key));
+let deactivatedPenulis = new Set(); // nama penulis yang di-nonaktifkan dari filter (default: semua aktif)
+let searchText = '';
+let selectedDate = null;   // yyyy-mm-dd of drawer currently open
+let editingId = null;      // id being edited in the form, null = creating new
+
+/* ============ UTIL ============ */
+function fmtISO(d){
+  const y=d.getFullYear(), m=String(d.getMonth()+1).padStart(2,'0'), day=String(d.getDate()).padStart(2,'0');
+  return y+'-'+m+'-'+day;
+}
+function parseISO(s){
+  const [y,m,d] = s.split('-').map(Number);
+  return new Date(y, m-1, d);
+}
+function todayISO(){ return fmtISO(new Date()); }
+function uid(){ return 'sk_'+Date.now()+'_'+Math.floor(Math.random()*1000); }
+function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+const AVATAR_PALETTE = ['#F2B134','#3E92CC','#2BAE66','#E0546B','#9C6BFF','#3FD8D4','#F0566C','#4C8DFF'];
+function hashColor(name){
+  let h = 0;
+  for(let i=0;i<name.length;i++) h = (h*31 + name.charCodeAt(i)) >>> 0;
+  return AVATAR_PALETTE[h % AVATAR_PALETTE.length];
+}
+function initials(name){
+  const parts = String(name||'').trim().split(/\s+/).filter(Boolean);
+  if(parts.length===0) return '?';
+  if(parts.length===1) return parts[0].slice(0,2).toUpperCase();
+  return (parts[0][0]+parts[1][0]).toUpperCase();
+}
+function distinctPenulisList(){
+  const set = new Set();
+  SCRIPTS.forEach(s=>{ if(s.penulis && s.penulis.trim()) set.add(s.penulis.trim()); });
+  return Array.from(set).sort((a,b)=> a.localeCompare(b));
+}
+
+function toast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toast._tm);
+  toast._tm = setTimeout(()=> t.classList.remove('show'), 2600);
+}
+
+/* ============ LOCAL STORAGE ============ */
+function saveLocalCache(){
+  try{ localStorage.setItem('skScripts', JSON.stringify(SCRIPTS)); }catch(e){}
+}
+function loadLocalCache(){
+  try{
+    const raw = localStorage.getItem('skScripts');
+    if(raw) SCRIPTS = JSON.parse(raw);
+  }catch(e){ SCRIPTS = []; }
+  try{
+    const url = localStorage.getItem('skGasUrl') || '';
+    document.getElementById('gasUrl').value = url;
+  }catch(e){}
+}
+function getAppsScriptUrl(){
+  try{ return (localStorage.getItem('skGasUrl') || '').trim(); }catch(e){ return ''; }
+}
+function saveAppsScriptUrl(val){
+  try{ localStorage.setItem('skGasUrl', (val||'').trim()); }catch(e){}
+}
+
+/* ============ SIDEBAR: FILTERS + STATS ============ */
+function renderPenulisFilters(){
+  const box = document.getElementById('penulisFilters');
+  const names = distinctPenulisList();
+  if(names.length===0){
+    box.innerHTML = `<div class="rekap-empty">Nama penulis akan muncul di sini setelah script pertama ditambahkan.</div>`;
+    return;
+  }
+  box.innerHTML = names.map(n=>`
+    <button class="pill ${!deactivatedPenulis.has(n)?'active':''}" data-penulis="${esc(n)}">
+      <span class="dot" style="background:${!deactivatedPenulis.has(n)?hashColor(n):'rgba(255,255,255,.5)'}"></span>${esc(n)}
+    </button>
+  `).join('');
+  box.querySelectorAll('.pill').forEach(btn=>{
+    btn.onclick = ()=>{
+      const n = btn.dataset.penulis;
+      if(deactivatedPenulis.has(n)) deactivatedPenulis.delete(n); else deactivatedPenulis.add(n);
+      renderPenulisFilters(); renderCalendar();
+    };
+  });
+}
+function refreshPenulisDatalist(){
+  const dl = document.getElementById('penulisList');
+  if(dl) dl.innerHTML = distinctPenulisList().map(n=>`<option value="${esc(n)}">`).join('');
+}
+function renderPlatformFilters(){
+  const box = document.getElementById('platformFilters');
+  box.innerHTML = PLATFORMS.map(p=>`
+    <button class="pill ${activePlatforms.has(p)?'active':''}" data-platform="${esc(p)}">${esc(p)}</button>
+  `).join('');
+  box.querySelectorAll('.pill').forEach(btn=>{
+    btn.onclick = ()=>{
+      const p = btn.dataset.platform;
+      if(activePlatforms.has(p)) activePlatforms.delete(p); else activePlatforms.add(p);
+      renderPlatformFilters(); renderCalendar();
+    };
+  });
+}
+function renderStatusFilters(){
+  const box = document.getElementById('statusFilters');
+  box.innerHTML = STATUSES.map(s=>`
+    <button class="pill ${activeStatuses.has(s.key)?'active':''}" data-status="${esc(s.key)}">
+      <span class="dot" style="background:${activeStatuses.has(s.key)?s.color:'rgba(255,255,255,.5)'}"></span>${esc(s.key)}
+    </button>
+  `).join('');
+  box.querySelectorAll('.pill').forEach(btn=>{
+    btn.onclick = ()=>{
+      const s = btn.dataset.status;
+      if(activeStatuses.has(s)) activeStatuses.delete(s); else activeStatuses.add(s);
+      renderStatusFilters(); renderCalendar();
+    };
+  });
+}
+function renderStats(){
+  const monthPrefix = viewYear+'-'+String(viewMonth+1).padStart(2,'0');
+  const monthItems = SCRIPTS.filter(s=> (s.tanggal||'').startsWith(monthPrefix));
+  const box = document.getElementById('statGrid');
+  const cards = [
+    {num: monthItems.length, lbl:'Total Script', color:'#fff'},
+    ...STATUSES.map(s=> ({num: monthItems.filter(m=>m.status===s.key).length, lbl:s.key, color:s.color}))
+  ];
+  box.innerHTML = cards.map(c=>`
+    <div class="stat-card">
+      <div class="num">${c.num}</div>
+      <div class="lbl"><span class="dot" style="background:${c.color}"></span>${esc(c.lbl)}</div>
+    </div>
+  `).join('');
+}
+
+/* ============ CALENDAR ============ */
+function filteredScriptsFor(dateStr){
+  return SCRIPTS.filter(s=>{
+    if(s.tanggal !== dateStr) return false;
+    if(!activePlatforms.has(s.platform)) return false;
+    if(!activeStatuses.has(s.status)) return false;
+    if(s.penulis && deactivatedPenulis.has(s.penulis.trim())) return false;
+    if(searchText && !(s.judul||'').toLowerCase().includes(searchText)) return false;
+    return true;
+  }).sort((a,b)=> (a.jam||'').localeCompare(b.jam||''));
+}
+
+function renderCalendar(){
+  document.getElementById('monthLabel').textContent = BULAN[viewMonth] + ' ' + viewYear;
+  const grid = document.getElementById('calGrid');
+  grid.innerHTML = '';
+
+  const firstOfMonth = new Date(viewYear, viewMonth, 1);
+  const startWeekday = firstOfMonth.getDay(); // 0=Min
+  const daysInMonth = new Date(viewYear, viewMonth+1, 0).getDate();
+  const daysInPrevMonth = new Date(viewYear, viewMonth, 0).getDate();
+  const totalCells = Math.ceil((startWeekday + daysInMonth) / 7) * 7;
+  const todayStr = todayISO();
+
+  for(let i=0;i<totalCells;i++){
+    const dayNum = i - startWeekday + 1;
+    const cell = document.createElement('div');
+
+    let cellDate, inMonth = true;
+    if(dayNum < 1){
+      cellDate = new Date(viewYear, viewMonth-1, daysInPrevMonth + dayNum);
+      inMonth = false;
+    } else if(dayNum > daysInMonth){
+      cellDate = new Date(viewYear, viewMonth+1, dayNum - daysInMonth);
+      inMonth = false;
+    } else {
+      cellDate = new Date(viewYear, viewMonth, dayNum);
+    }
+    const dateStr = fmtISO(cellDate);
+
+    cell.className = 'cal-cell clickable' + (dateStr===todayStr?' today':'') + (inMonth?'':' pad');
+    if(!inMonth) cell.style.opacity = '0.42';
+
+    const items = filteredScriptsFor(dateStr);
+    const shown = items.slice(0,3);
+    const more = items.length - shown.length;
+
+    cell.innerHTML = `
+      <div class="daynum">${cellDate.getDate()}</div>
+      <div class="cal-badges">
+        ${shown.map(it=>`<div class="cal-badge" style="background:${STATUS_COLOR[it.status]||'#94A3B8'}">
+            ${it.penulis?`<span class="rekap-avatar" style="width:14px;height:14px;font-size:7.5px;background:${hashColor(it.penulis)};flex-shrink:0;">${esc(initials(it.penulis))}</span>`:''}
+            ${it.jam?`<span class="t">${esc(it.jam)}</span>`:''}<span>${esc(it.judul)}</span>
+          </div>`).join('')}
+        ${more>0?`<div class="cal-more">+${more} lagi</div>`:''}
+      </div>
+    `;
+    cell.addEventListener('click', ()=> openDrawer(dateStr));
+    grid.appendChild(cell);
+  }
+}
+
+/* ============ DRAWER (day detail + form) ============ */
+function openDrawer(dateStr){
+  selectedDate = dateStr;
+  editingId = null;
+  document.getElementById('dayOverlay').classList.add('open');
+  renderDrawer();
+}
+function closeDrawer(){
+  document.getElementById('dayOverlay').classList.remove('open');
+  selectedDate = null;
+  editingId = null;
+}
+function renderDrawer(){
+  const d = parseISO(selectedDate);
+  document.getElementById('drawerTitle').textContent = HARI[d.getDay()] + ', ' + d.getDate() + ' ' + BULAN[d.getMonth()] + ' ' + d.getFullYear();
+
+  const items = filteredScriptsFor(selectedDate);
+  document.getElementById('drawerSub').textContent = items.length + ' script terjadwal';
+
+  const list = document.getElementById('ticketList');
+  if(items.length === 0){
+    list.innerHTML = `<div class="empty-note">Belum ada script konten di tanggal ini.<br>Isi form di bawah untuk menambahkan.</div>`;
+  } else {
+    list.innerHTML = items.map(it=>`
+      <div class="ticket" style="margin-bottom:11px;">
+        <div class="clock">
+          <div class="ic">🕐</div>
+          <div class="time">${esc(it.jam || '--:--')}</div>
+        </div>
+        <div class="ticket-main">
+          <div class="title">${esc(it.judul)}</div>
+          <div class="ticket-tags">
+            ${it.penulis?`<span class="tag tag-platform">👤 ${esc(it.penulis)}</span>`:''}
+            <span class="tag tag-platform">${esc(it.platform)}</span>
+            <span class="tag tag-status" style="background:${STATUS_COLOR[it.status]||'#94A3B8'}">${esc(it.status)}</span>
+          </div>
+          ${it.catatan?`<div class="ticket-note">${esc(it.catatan)}</div>`:''}
+          <div class="ticket-actions">
+            <button class="mini-btn" data-edit="${esc(it.id)}">✏️ Edit</button>
+            <button class="mini-btn danger" data-del="${esc(it.id)}">🗑️ Hapus</button>
+          </div>
+        </div>
+      </div>
+    `).join('');
+    list.querySelectorAll('[data-edit]').forEach(b=> b.onclick = ()=> fillFormForEdit(b.dataset.edit));
+    list.querySelectorAll('[data-del]').forEach(b=> b.onclick = ()=> deleteItem(b.dataset.del));
+  }
+
+  resetFormFields();
+  document.getElementById('fTanggal').value = selectedDate;
+}
+
+function renderStatusChoice(selected){
+  const box = document.getElementById('statusChoice');
+  box.innerHTML = STATUSES.map(s=>`
+    <div class="status-opt ${s.key===selected?'active':''}" data-status="${esc(s.key)}"
+         style="${s.key===selected?`background:${s.color};`:''}">${esc(s.key)}</div>
+  `).join('');
+  box.querySelectorAll('.status-opt').forEach(el=>{
+    el.onclick = ()=>{
+      box.querySelectorAll('.status-opt').forEach(o=>{ o.classList.remove('active'); o.style.background=''; });
+      el.classList.add('active');
+      el.style.background = STATUS_COLOR[el.dataset.status];
+      box.dataset.selected = el.dataset.status;
+    };
+  });
+  box.dataset.selected = selected;
+}
+
+function resetFormFields(){
+  editingId = null;
+  document.getElementById('formTitle').textContent = '➕ Tambah Script Baru';
+  document.getElementById('btnSaveForm').textContent = 'Simpan Script';
+  document.getElementById('fId').value = '';
+  document.getElementById('fJudul').value = '';
+  document.getElementById('fPenulis').value = '';
+  document.getElementById('fPlatform').value = 'TikTok';
+  document.getElementById('fJam').value = '09:00';
+  document.getElementById('fCatatan').value = '';
+  renderStatusChoice('Draft');
+}
+
+function fillFormForEdit(id){
+  const it = SCRIPTS.find(s=>s.id===id);
+  if(!it) return;
+  editingId = id;
+  document.getElementById('formTitle').textContent = '✏️ Edit Script';
+  document.getElementById('btnSaveForm').textContent = 'Update Script';
+  document.getElementById('fId').value = it.id;
+  document.getElementById('fTanggal').value = it.tanggal;
+  document.getElementById('fJudul').value = it.judul;
+  document.getElementById('fPenulis').value = it.penulis || '';
+  document.getElementById('fPlatform').value = it.platform;
+  document.getElementById('fJam').value = it.jam || '09:00';
+  document.getElementById('fCatatan').value = it.catatan || '';
+  renderStatusChoice(it.status);
+  document.getElementById('fJudul').scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+/* ============ CRUD ============ */
+document.getElementById('scriptForm').addEventListener('submit', async function(e){
+  e.preventDefault();
+  const judul = document.getElementById('fJudul').value.trim();
+  if(!judul){ toast('Judul script wajib diisi'); return; }
+  const data = {
+    judul,
+    penulis: document.getElementById('fPenulis').value.trim(),
+    platform: document.getElementById('fPlatform').value,
+    status: document.getElementById('statusChoice').dataset.selected || 'Draft',
+    tanggal: document.getElementById('fTanggal').value,
+    jam: document.getElementById('fJam').value,
+    catatan: document.getElementById('fCatatan').value.trim()
+  };
+
+  let payload;
+  if(editingId){
+    const idx = SCRIPTS.findIndex(s=>s.id===editingId);
+    if(idx>-1){ SCRIPTS[idx] = {...SCRIPTS[idx], ...data, updatedAt:new Date().toISOString()}; }
+    payload = {op:'update', id:editingId, ...data};
+    toast('Script diperbarui');
+  } else {
+    const id = uid();
+    const now = new Date().toISOString();
+    SCRIPTS.push({id, ...data, createdAt:now, updatedAt:now});
+    payload = {op:'create', id, ...data};
+    toast('Script ditambahkan');
+  }
+  saveLocalCache();
+  refreshAll(); renderDrawer();
+
+  const res = await pushToSheet(payload);
+  if(getAppsScriptUrl()) renderConnBanner(res === 'ok' ? 'ok' : 'warn');
+});
+
+document.getElementById('btnCancelForm').onclick = ()=>{
+  resetFormFields();
+  if(selectedDate) document.getElementById('fTanggal').value = selectedDate;
+};
+
+async function deleteItem(id){
+  if(!confirm('Hapus script ini?')) return;
+  SCRIPTS = SCRIPTS.filter(s=>s.id!==id);
+  saveLocalCache();
+  toast('Script dihapus');
+  refreshAll(); renderDrawer();
+  const res = await pushToSheet({op:'delete', id});
+  if(getAppsScriptUrl()) renderConnBanner(res === 'ok' ? 'ok' : 'warn');
+}
+
+/* Merender ulang semua bagian yang bergantung pada SCRIPTS/bulan aktif */
+function refreshAll(){
+  renderCalendar();
+  renderStats();
+  renderPenulisFilters();
+  refreshPenulisDatalist();
+  renderTicker();
+  renderDailyList();
+  const cnt = document.getElementById('localDataCount');
+  if(cnt) cnt.textContent = SCRIPTS.length + ' script tersimpan di perangkat ini.';
+}
+
+/* ============ RUNNING TEXT (TICKER) ============ */
+function renderTicker(){
+  const bar = document.getElementById('tickerBar');
+  const content = document.getElementById('tickerContent');
+  const todayStr = todayISO();
+  const soon = new Date();
+  soon.setDate(soon.getDate() + 3);
+  const soonStr = fmtISO(soon);
+
+  const relevant = SCRIPTS.filter(s=>{
+    return s.tanggal && s.status !== 'Tayang' && s.tanggal <= soonStr;
+  }).sort((a,b)=> (a.tanggal+((a.jam)||'')).localeCompare(b.tanggal+((b.jam)||'')));
+
+  if(!relevant.length){
+    bar.classList.add('is-empty');
+    content.innerHTML = '';
+    return;
+  }
+
+  const items = relevant.map(s=>{
+    const isOverdue = s.tanggal < todayStr;
+    const isToday = s.tanggal === todayStr;
+    const cls = isOverdue ? 'overdue' : (isToday ? 'due-today' : '');
+    const label = isOverdue ? 'TERLAMBAT' : (isToday ? 'TAYANG HARI INI' : 'segera, ' + s.tanggal);
+    return `<span class="${cls}">⚠️ ${label} — ${esc(s.judul)} (${esc(s.platform||'Lainnya')}${s.penulis?' · '+esc(s.penulis):''})</span>`;
+  });
+  content.innerHTML = items.join('') + items.join('');
+  bar.classList.remove('is-empty');
+}
+
+/* ============ LIST HARIAN (SIDEBAR) ============ */
+function renderDailyList(){
+  const box = document.getElementById('dailyList');
+  const todayStr = todayISO();
+  const items = SCRIPTS.filter(s=> s.tanggal === todayStr).sort((a,b)=> (a.jam||'').localeCompare(b.jam||''));
+  if(!items.length){
+    box.innerHTML = `<div class="rekap-empty">Belum ada script yang dijadwalkan hari ini.</div>`;
+    return;
+  }
+  box.innerHTML = items.map(s=>`
+    <div class="daily-item" data-id="${esc(s.id)}">
+      <span class="ddot" style="background:${STATUS_COLOR[s.status]||'#94A3B8'}"></span>
+      <span class="dtime">${esc(s.jam||'--:--')}</span>
+      <span class="dtitle">${esc(s.judul)}</span>
+    </div>
+  `).join('');
+  box.querySelectorAll('.daily-item').forEach(el=>{
+    el.onclick = ()=> openDrawer(todayStr);
+  });
+}
+
+/* ============ NAV + FILTERS + SEARCH ============ */
+document.getElementById('prevMonth').onclick = ()=>{
+  viewMonth--; if(viewMonth<0){ viewMonth=11; viewYear--; }
+  renderCalendar(); renderStats();
+};
+document.getElementById('nextMonth').onclick = ()=>{
+  viewMonth++; if(viewMonth>11){ viewMonth=0; viewYear++; }
+  renderCalendar(); renderStats();
+};
+document.getElementById('searchInput').addEventListener('input', (e)=>{
+  searchText = e.target.value.trim().toLowerCase();
+  renderCalendar();
+});
+document.getElementById('btnAddToday').onclick = ()=> openDrawer(todayISO());
+document.getElementById('drawerClose').onclick = closeDrawer;
+document.getElementById('dayOverlay').addEventListener('click', (e)=>{
+  if(e.target.id === 'dayOverlay') closeDrawer();
+});
+
+/* ============ TABS ============ */
+function switchTab(tab){
+  document.getElementById('calendarView').style.display = tab==='cal' ? 'block' : 'none';
+  document.getElementById('settingsView').style.display = tab==='settings' ? 'block' : 'none';
+  document.getElementById('tabCalBtn').classList.toggle('active', tab==='cal');
+  document.getElementById('tabSettingsBtn').classList.toggle('active', tab==='settings');
+  document.getElementById('topCrumb').textContent = tab==='cal'
+    ? 'Klik salah satu tanggal untuk lihat / tambah script konten hari itu'
+    : 'Hubungkan dashboard ke Google Sheets kamu sendiri';
+  if(tab==='settings') document.getElementById('gasUrl').value = getAppsScriptUrl();
+}
+document.getElementById('tabCalBtn').onclick = ()=> switchTab('cal');
+document.getElementById('tabSettingsBtn').onclick = ()=> switchTab('settings');
+document.getElementById('btnSettings').onclick = ()=> switchTab('settings');
+
+/* ============ SETTINGS: SIMPAN & HUBUNGKAN ============ */
+document.getElementById('btnSaveUrl').onclick = async ()=>{
+  const val = document.getElementById('gasUrl').value.trim();
+  saveAppsScriptUrl(val);
+  const msg = document.getElementById('settingsMsg');
+  if(!val){
+    msg.innerHTML = '<span class="badge warn">URL dikosongkan — dashboard hanya memakai penyimpanan lokal.</span>';
+    renderConnBanner('warn');
+    return;
+  }
+  msg.innerHTML = '<span style="color:var(--muted);">Menghubungkan &amp; menarik data…</span>';
+  const res = await pullFromSheet();
+  msg.innerHTML = res === 'ok'
+    ? '<span class="badge ok">Terhubung ✓ — data berhasil ditarik dari sheet "ScriptKonten"</span>'
+    : '<span class="badge warn">URL tersimpan, tapi gagal mengambil data. Cek deployment Apps Script kamu.</span>';
+  refreshAll();
+  renderConnBanner(res === 'ok' ? 'ok' : 'warn');
+};
+
+/* ============ CODE.GS COPY BOX ============ */
+document.getElementById('codeGsBox').textContent = CODE_GS;
+document.getElementById('btnCopyCode').onclick = async ()=>{
+  try{
+    await navigator.clipboard.writeText(CODE_GS);
+    toast('✅ Kode Code.gs disalin ke clipboard');
+  }catch(e){
+    // fallback kalau clipboard API diblokir browser
+    const ta = document.createElement('textarea');
+    ta.value = CODE_GS;
+    document.body.appendChild(ta);
+    ta.select();
+    try{ document.execCommand('copy'); toast('✅ Kode Code.gs disalin ke clipboard'); }
+    catch(e2){ toast('❌ Gagal menyalin, salin manual dari kotak di atas'); }
+    document.body.removeChild(ta);
+  }
+};
+
+/* ============ REFRESH BUTTON ============ */
+document.getElementById('btnRefresh').onclick = async ()=>{
+  const btn = document.getElementById('btnRefresh');
+  if(!getAppsScriptUrl()){ switchTab('settings'); return; }
+  btn.disabled = true; btn.textContent = '⏳ Menarik…';
+  const res = await pullFromSheet();
+  btn.disabled = false; btn.textContent = '🔄 Refresh';
+  refreshAll();
+  if(selectedDate) renderDrawer();
+  renderConnBanner(res === 'ok' ? 'ok' : 'warn');
+};
+
+/* ======================================================================
+   SINKRONISASI: TARIK DATA (GET ?action=read) & KIRIM DATA (POST)
+   Pola sama seperti Dashboard ToDo / Dashboard Marketing — fetch()
+   langsung ke Web App Apps Script, tanpa google.script.run.
+   ====================================================================== */
+async function pullFromSheet(){
+  const url = getAppsScriptUrl();
+  if(!url) return 'no-url';
+  try{
+    const controller = new AbortController();
+    const timer = setTimeout(()=>controller.abort(), 20000);
+    const res = await fetch(url+'?action=read', {cache:'no-store', signal:controller.signal});
+    clearTimeout(timer);
+    const json = await res.json();
+    if(json.status==='ok' && Array.isArray(json.items)){
+      SCRIPTS = json.items;
+      saveLocalCache();
+      return 'ok';
+    }
+    return 'error';
+  }catch(err){
+    console.warn('Gagal menarik data dari spreadsheet:', err);
+    return 'error';
+  }
+}
+
+async function pushToSheet(payload){
+  const url = getAppsScriptUrl();
+  if(!url) return 'no-url'; // hanya simpan lokal kalau belum ada integrasi
+  try{
+    const controller = new AbortController();
+    const timer = setTimeout(()=>controller.abort(), 15000);
+    const res = await fetch(url, {
+      method:'POST',
+      headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body: JSON.stringify(payload),
+      signal: controller.signal
+    });
+    clearTimeout(timer);
+    const body = await res.json().catch(()=>null);
+    if(body && body.status==='error') return 'error';
+    return 'ok';
+  }catch(err){
+    console.warn('Gagal mengirim data ke spreadsheet:', err);
+    toast('⚠️ Gagal sinkron ke Sheet, tersimpan lokal saja');
+    return 'error';
+  }
+}
+
+function renderConnBanner(state){
+  const el = document.getElementById('connBanner');
+  const note = document.getElementById('syncNote');
+  const url = getAppsScriptUrl();
+  if(!url){
+    el.innerHTML = '<div class="conn-banner warn"><span class="cdot"></span> URL Apps Script belum diisi — data hanya tersimpan di perangkat/browser ini. Isi di tab <b>⚙️ Pengaturan &amp; Panduan</b> supaya tersinkron ke Google Sheets.</div>';
+    note.textContent = 'Belum tersambung ke Google Sheet';
+    return;
+  }
+  if(state === 'ok'){
+    el.innerHTML = '<div class="conn-banner ok"><span class="cdot"></span> Terhubung ke Google Sheets — setiap script baru / perubahan otomatis dikirim ke sheet "ScriptKonten".</div>';
+    note.textContent = '🟢 Tersambung ke Google Sheet';
+  } else {
+    el.innerHTML = '<div class="conn-banner warn"><span class="cdot"></span> Tersimpan lokal, tapi gagal sinkron ke spreadsheet. Cek koneksi / URL Apps Script di tab Pengaturan.</div>';
+    note.textContent = '⚠️ Gagal sinkron ke Sheet';
+  }
+}
+
+/* ============ INIT ============ */
+async function init(){
+  loadLocalCache();
+  renderPlatformFilters();
+  renderStatusFilters();
+  refreshAll();
+  document.getElementById('localDataCount').textContent = SCRIPTS.length + ' script tersimpan di perangkat ini.';
+  const url = getAppsScriptUrl();
+  if(url){
+    const res = await pullFromSheet();
+    renderConnBanner(res === 'ok' ? 'ok' : 'warn');
+    refreshAll();
+    if(selectedDate) renderDrawer();
+  } else {
+    renderConnBanner('warn');
+  }
+}
+init();
+</script>
+</body>
+</html>
