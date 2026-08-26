@@ -387,6 +387,132 @@ main{flex:1;padding:30px 34px 60px;max-width:1180px;}
   z-index:300;display:none;
 }
 .toast.show{display:block;}
+
+/* ============ WEEKLY TRACKER ============ */
+.week-nav{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--white);border:1px solid var(--line);
+  border-radius:14px;padding:10px 14px;margin-bottom:16px;box-shadow:0 1px 0 #fff inset, 0 14px 26px -16px rgba(20,60,110,.25);}
+.week-nav .wk-btn{width:32px;height:32px;border-radius:9px;border:1px solid var(--line);background:var(--canvas-2);color:var(--ink);
+  font-size:15px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.week-nav .wk-btn:hover{border-color:var(--accent);color:var(--accent-dark);}
+.week-nav .wk-btn:active{transform:translateY(2px) scale(.95);}
+.week-nav .wk-label{font-family:'Poppins',sans-serif;font-weight:700;font-size:14px;text-align:center;}
+.week-nav .wk-today{font-size:11px;color:var(--muted);text-align:center;margin-top:2px;}
+
+.pace-card{background:linear-gradient(180deg,#fff,#FBFDFF);border-radius:18px;border:1px solid var(--line-soft);
+  box-shadow:0 1px 0 #fff inset, 0 20px 40px -20px rgba(20,60,110,.28);padding:18px 20px;margin-bottom:16px;
+  display:flex;flex-wrap:wrap;gap:20px;align-items:center;}
+.pace-num-block{display:flex;flex-direction:column;min-width:110px;}
+.pace-num-block .n{font-family:'Poppins',sans-serif;font-weight:800;font-size:26px;line-height:1;color:var(--ink);}
+.pace-num-block .l{font-size:11px;color:var(--muted);margin-top:4px;}
+.pace-bar-wrap{flex:1;min-width:200px;}
+.pace-bar-track{height:14px;border-radius:8px;background:var(--canvas-1);overflow:hidden;border:1px solid var(--line-soft);
+  box-shadow:0 2px 5px -2px rgba(20,60,110,.15) inset;}
+.pace-bar-fill{height:100%;border-radius:8px;transition:width .3s ease;background:linear-gradient(90deg,var(--accent),var(--accent-dark));}
+.pace-bar-fill.ok{background:linear-gradient(90deg,#3FCB84,var(--tayang));}
+.pace-bar-fill.warn{background:linear-gradient(90deg,#F5C463,var(--review));}
+.pace-bar-fill.danger{background:linear-gradient(90deg,#F0808F,var(--status-red, #E0546B));}
+.pace-caption{font-size:11.5px;color:var(--muted);margin-top:7px;}
+.pace-status-chip{padding:8px 16px;border-radius:20px;font-size:12px;font-weight:700;display:flex;align-items:center;gap:7px;flex-shrink:0;}
+.pace-status-chip .dot{width:9px;height:9px;border-radius:50%;}
+.pace-status-chip.ok{background:#E4F9EE;color:#1C8C50;}
+.pace-status-chip.ok .dot{background:var(--tayang);}
+.pace-status-chip.warn{background:#FEF3DC;color:#966009;}
+.pace-status-chip.warn .dot{background:var(--review);}
+.pace-status-chip.danger{background:#FCE4E8;color:#B23347;}
+.pace-status-chip.danger .dot{background:#E0546B;}
+
+.week-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:10px;margin-bottom:20px;}
+.week-col{min-height:180px;border-radius:14px;border:1px solid var(--line-soft);padding:10px 9px;
+  background:linear-gradient(165deg,#fff,var(--canvas-2) 85%);box-shadow:0 1px 0 #fff inset, 0 8px 16px -8px rgba(20,60,110,.16);
+  display:flex;flex-direction:column;gap:7px;}
+.week-col.today{border-color:var(--accent);box-shadow:0 0 0 1.5px var(--accent) inset, 0 10px 20px -8px rgba(45,125,210,.3);}
+.week-col .wc-head{display:flex;flex-direction:column;gap:1px;padding-bottom:6px;border-bottom:1px solid var(--line-soft);}
+.week-col .wc-dow{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);}
+.week-col .wc-date{font-family:'Poppins',sans-serif;font-weight:700;font-size:13.5px;color:var(--ink);}
+.week-col.today .wc-date{color:var(--accent-dark);}
+.week-col .wc-items{display:flex;flex-direction:column;gap:5px;flex:1;}
+.week-col .wc-empty{font-size:10.5px;color:#B7C6D6;padding-top:6px;}
+.wc-badge{font-size:10px;font-weight:600;padding:5px 7px;border-radius:7px;color:#fff;cursor:pointer;
+  overflow:hidden;box-shadow:0 1px 0 rgba(255,255,255,.35) inset, 0 2px 4px rgba(20,60,110,.18);}
+.wc-badge .t{font-family:'Inter',monospace;opacity:.85;font-size:9px;display:block;}
+.wc-badge .jt{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block;}
+.wc-add{border:1.5px dashed var(--line);border-radius:8px;background:none;color:var(--muted);font-size:10.5px;
+  font-weight:700;padding:6px 0;text-align:center;}
+.wc-add:hover{border-color:var(--accent);color:var(--accent-dark);}
+
+/* Lampu Kuning / warnings */
+.warn-card{background:linear-gradient(180deg,#fff,#FBFDFF);border-radius:18px;border:1px solid var(--line-soft);
+  box-shadow:0 1px 0 #fff inset, 0 20px 40px -20px rgba(20,60,110,.28);padding:18px 20px;margin-bottom:20px;}
+.warn-list{display:flex;flex-direction:column;gap:9px;margin-top:12px;}
+.warn-item{display:flex;align-items:flex-start;gap:11px;padding:11px 13px;border-radius:12px;border:1px solid var(--line-soft);}
+.warn-item .wi-ic{font-size:16px;flex-shrink:0;line-height:1.3;}
+.warn-item .wi-text{font-size:12.5px;color:var(--ink);line-height:1.5;}
+.warn-item .wi-text b{font-weight:700;}
+.warn-item.kuning{background:#FFFBEF;border-color:#F5E2A8;}
+.warn-item.merah{background:#FDF0F2;border-color:#F2C2CB;}
+.warn-item.hijau{background:#EFFAF3;border-color:#BEE7CE;}
+.warn-empty{font-size:12.5px;color:var(--muted);padding:8px 2px;}
+
+/* ============ STRUKTUR SCRIPT PER PLATFORM ============ */
+.struct-card{background:linear-gradient(180deg,#fff,#FBFDFF);border-radius:18px;border:1px solid var(--line-soft);
+  box-shadow:0 1px 0 #fff inset, 0 20px 40px -20px rgba(20,60,110,.28);padding:18px 20px;margin-bottom:20px;}
+.struct-card .pill-group{margin-top:12px;margin-bottom:16px;}
+.struct-timeline{display:flex;gap:10px;flex-wrap:wrap;align-items:stretch;}
+.struct-step{flex:1;min-width:160px;border-radius:14px;padding:14px 15px;color:#fff;position:relative;
+  display:flex;flex-direction:column;gap:6px;box-shadow:0 1px 0 rgba(255,255,255,.3) inset, 0 12px 24px -12px rgba(20,60,110,.35);}
+.struct-step .ss-idx{font-family:'Inter',monospace;font-size:10px;opacity:.8;letter-spacing:.06em;text-transform:uppercase;}
+.struct-step .ss-label{font-family:'Poppins',sans-serif;font-weight:700;font-size:14.5px;}
+.struct-step .ss-time{font-size:11px;font-weight:700;background:rgba(255,255,255,.22);align-self:flex-start;
+  padding:3px 9px;border-radius:20px;}
+.struct-step .ss-desc{font-size:11.5px;line-height:1.55;opacity:.95;}
+.struct-note{font-size:12px;color:var(--muted);margin-top:14px;line-height:1.6;background:var(--canvas-2);
+  border:1px solid var(--line-soft);border-radius:10px;padding:10px 13px;}
+@media (max-width:760px){.struct-timeline{flex-direction:column;}}
+
+/* ---- Composer (Susun Script) ---- */
+.composer-card{background:linear-gradient(180deg,#fff,#FBFDFF);border-radius:18px;border:1px solid var(--line-soft);
+  box-shadow:0 1px 0 #fff inset, 0 20px 40px -20px rgba(20,60,110,.28);padding:18px 20px;margin-bottom:20px;}
+.composer-platform-note{font-size:12px;color:var(--muted);margin:2px 0 14px;}
+.composer-platform-note b{color:var(--ink);}
+.composer-seg{border-radius:14px;border:1px solid var(--line-soft);padding:13px 14px;margin-bottom:12px;
+  background:linear-gradient(165deg,#fff,var(--canvas-2) 88%);}
+.composer-seg .cs-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:8px;}
+.composer-seg .cs-title{display:flex;align-items:center;gap:8px;}
+.composer-seg .cs-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+.composer-seg .cs-label{font-family:'Poppins',sans-serif;font-weight:700;font-size:13px;}
+.composer-seg .cs-time{font-size:10.5px;color:var(--muted);font-weight:600;}
+.composer-seg select.cs-insert{font-size:11px;padding:5px 8px;border-radius:8px;border:1px solid var(--line);
+  background:var(--white);color:var(--ink);max-width:200px;}
+.composer-seg textarea{width:100%;background:var(--white);border:1px solid var(--line);border-radius:10px;
+  padding:12px 14px;font-size:13.5px;line-height:1.6;color:var(--ink);outline:none;resize:vertical;
+  min-height:130px;box-shadow:0 2px 6px -2px rgba(20,60,110,.10) inset;
+  transition:border-color .15s ease,box-shadow .15s ease,background .15s ease;}
+.composer-seg textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft);}
+.composer-seg textarea::placeholder{color:#A9BDCF;}
+.composer-preview{background:var(--ink);color:#EAF2FA;border-radius:12px;padding:14px 16px;font-family:'Inter',monospace;
+  font-size:11.5px;line-height:1.7;white-space:pre-wrap;max-height:260px;overflow-y:auto;margin-top:6px;}
+.composer-actions{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;}
+.composer-actions .btn{flex:1;min-width:180px;justify-content:center;}
+
+/* ============ POLA SCRIPT (library) ============ */
+.pattern-toolbar{display:flex;align-items:center;justify-content:space-between;row-gap:12px;column-gap:12px;flex-wrap:wrap;margin-bottom:20px;}
+.pattern-toolbar .pill-group{row-gap:10px;}
+.pattern-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;}
+.pattern-card{background:linear-gradient(180deg,#fff,#FBFDFF);border-radius:16px;border:1px solid var(--line-soft);
+  box-shadow:0 1px 0 #fff inset, 0 16px 30px -18px rgba(20,60,110,.26);padding:16px 17px;display:flex;flex-direction:column;gap:9px;}
+.pattern-card .pc-cat{align-self:flex-start;font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
+  color:#fff;padding:4px 10px;border-radius:20px;background:var(--pop-purple);}
+.pattern-card .pc-title{font-family:'Poppins',sans-serif;font-weight:700;font-size:14px;color:var(--ink);}
+.pattern-card .pc-body{font-size:12.5px;color:var(--ink);line-height:1.6;white-space:pre-wrap;background:var(--canvas-2);
+  border-radius:10px;padding:10px 12px;border:1px solid var(--line-soft);max-height:160px;overflow-y:auto;}
+.pattern-card .pc-note{font-size:11.5px;color:var(--muted);line-height:1.5;}
+.pattern-card .pc-actions{display:flex;gap:8px;margin-top:2px;}
+.pattern-empty{grid-column:1/-1;text-align:center;padding:50px 20px;color:var(--muted);font-size:13px;}
+
+.lp-pill{padding:8px 14px;border-radius:20px;border:1px solid var(--line);background:var(--white);color:var(--muted);
+  font-size:12px;font-weight:600;display:inline-flex;align-items:center;gap:6px;transition:transform .1s ease,background .15s ease;}
+.lp-pill.active{background:var(--accent);color:#fff;border-color:var(--accent);}
+.lp-pill:active{transform:translateY(2px) scale(.97);}
 </style>
 </head>
 <body>
@@ -402,7 +528,7 @@ main{flex:1;padding:30px 34px 60px;max-width:1180px;}
       <div class="brand-mark">🗓️</div>
       <div class="brand-text">
         <div class="name">Script Konten</div>
-        <div class="sub">Content Calendar</div>
+        <div class="sub">TikTok Content Tracker</div>
       </div>
     </div>
 
@@ -453,6 +579,8 @@ main{flex:1;padding:30px 34px 60px;max-width:1180px;}
       <div class="top-actions">
         <div class="tabs">
           <button class="tab-btn active" id="tabCalBtn">🗓️ Kalender</button>
+          <button class="tab-btn" id="tabWeeklyBtn">📊 Pelacak Mingguan</button>
+          <button class="tab-btn" id="tabPatternBtn">🧩 Pola Script</button>
           <button class="tab-btn" id="tabSettingsBtn">⚙️ Pengaturan &amp; Panduan</button>
         </div>
         <button class="btn btn-ghost" id="btnRefresh" title="Tarik data terbaru dari Google Sheets">🔄 Refresh</button>
@@ -473,6 +601,91 @@ main{flex:1;padding:30px 34px 60px;max-width:1180px;}
       </div>
     </div>
 
+    <div id="weeklyView" style="display:none;">
+      <div class="week-nav">
+        <button class="wk-btn" id="prevWeek">‹</button>
+        <div>
+          <div class="wk-label" id="weekLabel">— </div>
+          <div class="wk-today" id="weekTodayNote"></div>
+        </div>
+        <button class="wk-btn" id="nextWeek">›</button>
+      </div>
+
+      <div class="pace-card">
+        <div class="pace-num-block">
+          <div class="n" id="paceActual">0</div>
+          <div class="l">Tayang minggu ini</div>
+        </div>
+        <div class="pace-bar-wrap">
+          <div class="pace-bar-track"><div class="pace-bar-fill" id="paceBarFill" style="width:0%"></div></div>
+          <div class="pace-caption" id="paceCaption">Target belum diatur.</div>
+        </div>
+        <div class="pace-status-chip ok" id="paceChip"><span class="dot"></span><span id="paceChipText">Aman</span></div>
+      </div>
+
+      <div class="warn-card">
+        <div class="section-title">🚦 Lampu Kuning — Peringatan Dini</div>
+        <div class="msub" style="margin:0;">Hal-hal yang perlu diperhatikan supaya jadwal konten tidak molor.</div>
+        <div class="warn-list" id="warnList"></div>
+      </div>
+
+      <div class="cal-card" style="padding:18px 18px 16px;">
+        <div class="section-title" style="margin-bottom:12px;">Rincian per Hari</div>
+        <div class="week-grid" id="weekGrid"></div>
+      </div>
+    </div>
+
+    <div id="patternView" style="display:none;">
+      <div class="struct-card">
+        <div class="section-title">🧭 Struktur Script per Platform</div>
+        <div class="msub" style="margin:0;">Kerangka waktu yang biasa dipakai di lapangan. Pilih platform untuk lihat pembagian segmennya.</div>
+        <div class="pill-group" id="structPlatformFilters"></div>
+        <div class="struct-timeline" id="structTimeline"></div>
+        <div class="struct-note" id="structNote"></div>
+      </div>
+
+      <div class="composer-card">
+        <div class="section-title">✍️ Susun Script Sekarang</div>
+        <div class="composer-platform-note">Isi tiap segmen sesuai struktur <b id="composerPlatformLabel">TikTok</b> di atas, lalu simpan langsung jadi jadwal di Kalender.</div>
+        <div class="field">
+          <label>Judul / Topik Script</label>
+          <input type="text" id="cJudul" placeholder="Misal: Review produk skincare X">
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>Tanggal Posting</label>
+            <input type="date" id="cTanggal">
+          </div>
+          <div class="field">
+            <label>Jam Tayang</label>
+            <input type="time" id="cJam" value="09:00">
+          </div>
+          <div class="field">
+            <label>Penulis (opsional)</label>
+            <input type="text" id="cPenulis" list="penulisList" placeholder="Nama penulis">
+          </div>
+        </div>
+
+        <div id="composerFields"></div>
+
+        <div class="field">
+          <label>Preview Script Lengkap</label>
+          <div class="composer-preview" id="composerPreview"></div>
+        </div>
+
+        <div class="composer-actions">
+          <button type="button" class="btn btn-ghost" id="btnCopyComposed">📋 Salin Script Lengkap</button>
+          <button type="button" class="btn btn-primary" id="btnSaveComposed">🗓️ Simpan ke Kalender</button>
+        </div>
+      </div>
+
+      <div class="pattern-toolbar">
+        <div class="pill-group" id="patternCatFilters" style="flex-wrap:wrap;"></div>
+        <button class="btn btn-primary" id="btnAddPattern">＋ Tambah Pola</button>
+      </div>
+      <div class="pattern-grid" id="patternGrid"></div>
+    </div>
+
     <div id="settingsView" style="display:none;">
       <div class="settings-grid">
         <div>
@@ -491,6 +704,21 @@ main{flex:1;padding:30px 34px 60px;max-width:1180px;}
             <p class="msub" id="localDataCount" style="margin:0;">0 script tersimpan di perangkat ini.</p>
           </div>
           <div class="card">
+            <div class="section-title">📊 Target Mingguan &amp; Lampu Kuning</div>
+            <p class="msub">Dipakai di tab Pelacak Mingguan untuk menghitung progres &amp; peringatan. Tersimpan di perangkat ini.</p>
+            <div class="field-row">
+              <div class="field">
+                <label>Target tayang / minggu</label>
+                <input type="number" id="fWeeklyTarget" min="1" step="1" placeholder="mis. 5">
+              </div>
+              <div class="field">
+                <label>Batas hari status Review</label>
+                <input type="number" id="fReviewThreshold" min="1" step="1" placeholder="mis. 2">
+              </div>
+            </div>
+            <button class="btn btn-primary" id="btnSaveTracker" style="width:100%;justify-content:center;">Simpan Pengaturan Tracker</button>
+          </div>
+          <div class="card">
             <div class="section-title">📱 Kelola Platform</div>
             <p class="msub">Tambah atau hapus pilihan platform yang muncul di filter &amp; form.</p>
             <div class="field-row">
@@ -506,7 +734,7 @@ main{flex:1;padding:30px 34px 60px;max-width:1180px;}
             <div class="num">1</div>
             <div class="body">
               <h4>Buat Google Sheet baru</h4>
-              <p>Boleh spreadsheet kosong — sheet "ScriptKonten" dengan header akan dibuat otomatis oleh script di langkah berikutnya.</p>
+              <p>Boleh spreadsheet kosong — sheet "ScriptKonten", "PolaScript", dan "Pengaturan" dengan header masing-masing akan dibuat otomatis oleh script di langkah berikutnya.</p>
             </div>
           </div>
           <div class="guide-step">
@@ -598,6 +826,50 @@ main{flex:1;padding:30px 34px 60px;max-width:1180px;}
   </div>
 </div>
 
+<!-- ============ PATTERN DRAWER (Pola Script) ============ -->
+<div class="overlay" id="patternOverlay">
+  <div class="drawer">
+    <div class="drawer-head">
+      <div>
+        <div class="dtitle" id="patternDrawerTitle">🧩 Pola Script</div>
+        <div class="dsub">Simpan template hook, struktur, atau CTA yang biasa dipakai</div>
+      </div>
+      <button class="drawer-close" id="patternDrawerClose">✕</button>
+    </div>
+    <div class="drawer-body">
+      <div class="form-block">
+        <div class="ftitle" id="patternFormTitle">➕ Tambah Pola Script</div>
+        <form id="patternForm">
+          <input type="hidden" id="pId">
+          <div class="field">
+            <label>Kategori</label>
+            <div class="field-row">
+              <select id="pKategori" style="flex:1;"></select>
+              <input type="text" id="pKategoriBaru" placeholder="atau ketik kategori baru" style="flex:1;">
+            </div>
+          </div>
+          <div class="field">
+            <label>Judul Pola</label>
+            <input type="text" id="pJudul" placeholder="Misal: Hook 'Stop scroll' 3 detik" required>
+          </div>
+          <div class="field">
+            <label>Isi / Template Script</label>
+            <textarea id="pIsi" placeholder="Tulis pola/template kalimatnya di sini, boleh pakai [placeholder]..." style="min-height:120px;" required></textarea>
+          </div>
+          <div class="field">
+            <label>Catatan (opsional)</label>
+            <textarea id="pCatatan" placeholder="Kapan pola ini cocok dipakai, tips tambahan, dll"></textarea>
+          </div>
+          <div class="form-actions">
+            <button type="button" class="btn btn-ghost" id="btnCancelPattern">Batal</button>
+            <button type="submit" class="btn btn-primary" id="btnSavePattern">Simpan Pola</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -616,10 +888,22 @@ const CODE_GS = `/**
  *
  * Sheet "ScriptKonten" akan dibuat otomatis kalau belum ada, dengan kolom:
  * id | judul | penulis | platform | status | tanggal | jam | catatan | createdAt | updatedAt
+ *
+ * Dua sheet tambahan juga dibuat otomatis di spreadsheet yang sama:
+ * - "PolaScript"  : id | kategori | judul | isi | catatan | createdAt | updatedAt
+ *                   (Library Pola Script / template Hook-Build-Payoff-CTA)
+ * - "Pengaturan"  : key | value
+ *                   (target mingguan, batas hari review, & daftar kategori pola custom)
  */
 
 const SHEET_NAME = 'ScriptKonten';
 const HEADERS = ['id','judul','penulis','platform','status','tanggal','jam','catatan','createdAt','updatedAt'];
+
+const PATTERN_SHEET_NAME = 'PolaScript';
+const PATTERN_HEADERS = ['id','kategori','judul','isi','catatan','createdAt','updatedAt'];
+
+const SETTINGS_SHEET_NAME = 'Pengaturan';
+const SETTINGS_HEADERS = ['key','value'];
 
 function getSheet_(){
   const ss = SpreadsheetApp.getActiveSpreadsheet();
@@ -637,6 +921,133 @@ function getSheet_(){
   return sh;
 }
 
+function getPatternSheet_(){
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let sh = ss.getSheetByName(PATTERN_SHEET_NAME);
+  if(!sh){
+    sh = ss.insertSheet(PATTERN_SHEET_NAME);
+    sh.appendRow(PATTERN_HEADERS);
+    sh.setFrozenRows(1);
+  }
+  const firstRow = sh.getRange(1,1,1,PATTERN_HEADERS.length).getValues()[0];
+  if(firstRow.join('|') !== PATTERN_HEADERS.join('|')){
+    sh.getRange(1,1,1,PATTERN_HEADERS.length).setValues([PATTERN_HEADERS]);
+  }
+  return sh;
+}
+
+function getSettingsSheet_(){
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let sh = ss.getSheetByName(SETTINGS_SHEET_NAME);
+  if(!sh){
+    sh = ss.insertSheet(SETTINGS_SHEET_NAME);
+    sh.appendRow(SETTINGS_HEADERS);
+    sh.setFrozenRows(1);
+  }
+  const firstRow = sh.getRange(1,1,1,SETTINGS_HEADERS.length).getValues()[0];
+  if(firstRow.join('|') !== SETTINGS_HEADERS.join('|')){
+    sh.getRange(1,1,1,SETTINGS_HEADERS.length).setValues([SETTINGS_HEADERS]);
+  }
+  return sh;
+}
+
+function readPatterns_(){
+  const sh = getPatternSheet_();
+  const lastRow = sh.getLastRow();
+  if(lastRow < 2) return [];
+  const values = sh.getRange(2,1,lastRow-1,PATTERN_HEADERS.length).getValues();
+  return values.filter(r=>r[0]!=='').map(r=>{
+    const o = {};
+    PATTERN_HEADERS.forEach((h,i)=>{
+      let v = r[i];
+      if(v instanceof Date) v = v.toISOString();
+      o[h] = v;
+    });
+    return o;
+  });
+}
+
+function readSettings_(){
+  const sh = getSettingsSheet_();
+  const lastRow = sh.getLastRow();
+  const out = {};
+  if(lastRow < 2) return out;
+  const values = sh.getRange(2,1,lastRow-1,SETTINGS_HEADERS.length).getValues();
+  values.forEach(r=>{ if(r[0]!=='') out[r[0]] = r[1]; });
+  return out;
+}
+
+function setSetting_(key, value){
+  const sh = getSettingsSheet_();
+  const lastRow = sh.getLastRow();
+  if(lastRow >= 2){
+    const keys = sh.getRange(2,1,lastRow-1,1).getValues();
+    for(let i=0;i<keys.length;i++){
+      if(keys[i][0] === key){
+        sh.getRange(i+2,2,1,1).setValue(value);
+        return;
+      }
+    }
+  }
+  sh.appendRow([key, value]);
+}
+
+function findPatternRowById_(sh, id){
+  const lastRow = sh.getLastRow();
+  if(lastRow < 2) return -1;
+  const ids = sh.getRange(2,1,lastRow-1,1).getValues();
+  for(let i=0;i<ids.length;i++){
+    if(ids[i][0] === id) return i+2;
+  }
+  return -1;
+}
+
+function handlePatternWrite_(data){
+  const sh = getPatternSheet_();
+  const op = data.op;
+  const now = new Date().toISOString();
+
+  if(op === 'create'){
+    const id = data.id || ('pt_' + Date.now() + '_' + Math.floor(Math.random()*1000));
+    sh.appendRow([id, data.kategori||'', data.judul||'', data.isi||'', data.catatan||'', data.createdAt||now, now]);
+    return {status:'ok', op:'create', id};
+  }
+  if(op === 'update'){
+    const rowIdx = findPatternRowById_(sh, data.id);
+    if(rowIdx === -1) return {status:'error', message:'ID pola tidak ditemukan: '+data.id};
+    const row = sh.getRange(rowIdx,1,1,PATTERN_HEADERS.length).getValues()[0];
+    const map = {};
+    PATTERN_HEADERS.forEach((h,i)=> map[h]=row[i]);
+    ['kategori','judul','isi','catatan'].forEach(f=>{ if(data[f]!==undefined) map[f]=data[f]; });
+    map.updatedAt = now;
+    sh.getRange(rowIdx,1,1,PATTERN_HEADERS.length).setValues([PATTERN_HEADERS.map(h=>map[h])]);
+    return {status:'ok', op:'update', id:data.id};
+  }
+  if(op === 'delete'){
+    const rowIdx = findPatternRowById_(sh, data.id);
+    if(rowIdx === -1) return {status:'error', message:'ID pola tidak ditemukan: '+data.id};
+    sh.deleteRow(rowIdx);
+    return {status:'ok', op:'delete', id:data.id};
+  }
+  return {status:'error', message:'op tidak dikenali: '+op};
+}
+
+function handleSettingsWrite_(data){
+  const op = data.op;
+  if(op === 'set'){
+    if(data.key !== undefined){
+      setSetting_(data.key, data.value);
+      return {status:'ok', op:'set', key:data.key};
+    }
+    if(data.values && typeof data.values === 'object'){
+      Object.keys(data.values).forEach(k=> setSetting_(k, data.values[k]));
+      return {status:'ok', op:'set'};
+    }
+    return {status:'error', message:'key/values tidak diisi'};
+  }
+  return {status:'error', message:'op tidak dikenali: '+op};
+}
+
 function jsonOut_(obj){
   return ContentService.createTextOutput(JSON.stringify(obj))
     .setMimeType(ContentService.MimeType.JSON);
@@ -648,32 +1059,51 @@ function doGet(e){
 
     if(action === 'test'){
       const sh = getSheet_();
+      const pSh = getPatternSheet_();
+      const sSh = getSettingsSheet_();
       const rows = Math.max(0, sh.getLastRow()-1);
-      return jsonOut_({status:'ok', rowCounts:{ ScriptKonten: sh.getLastRow() }, message:'Koneksi berhasil. '+rows+' baris data.'});
+      return jsonOut_({status:'ok', rowCounts:{ ScriptKonten: sh.getLastRow(), PolaScript: pSh.getLastRow(), Pengaturan: sSh.getLastRow() }, message:'Koneksi berhasil. '+rows+' baris data.'});
     }
 
     if(action === 'read'){
       const sh = getSheet_();
       const lastRow = sh.getLastRow();
-      if(lastRow < 2) return jsonOut_({status:'ok', items:[]});
-      const values = sh.getRange(2,1,lastRow-1,HEADERS.length).getValues();
-      const items = values
-        .filter(r => r[0] !== '') // buang baris kosong
-        .map(r => {
-          const o = {};
-          HEADERS.forEach((h,i)=>{
-            let v = r[i];
-            if(v instanceof Date){
-              // tanggal -> yyyy-MM-dd, jam -> HH:mm, createdAt/updatedAt -> ISO string
-              if(h==='tanggal') v = Utilities.formatDate(v, Session.getScriptTimeZone(), 'yyyy-MM-dd');
-              else if(h==='jam') v = Utilities.formatDate(v, Session.getScriptTimeZone(), 'HH:mm');
-              else v = v.toISOString();
-            }
-            o[h] = v;
+      let items = [];
+      if(lastRow >= 2){
+        const values = sh.getRange(2,1,lastRow-1,HEADERS.length).getValues();
+        items = values
+          .filter(r => r[0] !== '') // buang baris kosong
+          .map(r => {
+            const o = {};
+            HEADERS.forEach((h,i)=>{
+              let v = r[i];
+              if(v instanceof Date){
+                // tanggal -> yyyy-MM-dd, jam -> HH:mm, createdAt/updatedAt -> ISO string
+                if(h==='tanggal') v = Utilities.formatDate(v, Session.getScriptTimeZone(), 'yyyy-MM-dd');
+                else if(h==='jam') v = Utilities.formatDate(v, Session.getScriptTimeZone(), 'HH:mm');
+                else v = v.toISOString();
+              }
+              o[h] = v;
+            });
+            return o;
           });
-          return o;
-        });
-      return jsonOut_({status:'ok', items});
+      }
+      // Sekalian kirim data Pola Script + kategori + pengaturan tracker
+      // dalam satu response supaya cuma 1x round-trip ke server.
+      const patterns = readPatterns_();
+      const settings = readSettings_();
+      let patternCats = [];
+      try{ patternCats = settings.patternCats ? JSON.parse(settings.patternCats) : []; }catch(e){ patternCats = []; }
+      return jsonOut_({
+        status:'ok',
+        items,
+        patterns,
+        patternCats,
+        settings: {
+          weeklyTarget: settings.weeklyTarget !== undefined ? Number(settings.weeklyTarget) : undefined,
+          reviewThreshold: settings.reviewThreshold !== undefined ? Number(settings.reviewThreshold) : undefined
+        }
+      });
     }
 
     return jsonOut_({status:'error', message:'Action tidak dikenali: '+action});
@@ -693,7 +1123,12 @@ function doPost(e){
   }
   try{
     const data = JSON.parse(e.postData.contents);
-    return jsonOut_(handleWrite_(data));
+    const type = data.type || 'script';
+    let result;
+    if(type === 'pattern') result = handlePatternWrite_(data);
+    else if(type === 'settings') result = handleSettingsWrite_(data);
+    else result = handleWrite_(data);
+    return jsonOut_(result);
   }catch(err){
     return jsonOut_({status:'error', message:String(err)});
   }finally{
@@ -784,6 +1219,72 @@ let searchText = '';
 let selectedDate = null;   // yyyy-mm-dd of drawer currently open
 let editingId = null;      // id being edited in the form, null = creating new
 
+/* ---- Pelacak Mingguan state ---- */
+let weekAnchor = new Date();     // tanggal manapun di minggu yang sedang dilihat
+let WEEKLY_TARGET = 5;
+let REVIEW_THRESHOLD_DAYS = 2;
+
+/* ---- Pola Script (library) state ---- */
+const DEFAULT_PATTERN_CATS = ['Hook','Build','Payoff','CTA'];
+let PATTERN_CATS = [];
+let PATTERNS = [];             // {id,kategori,judul,isi,catatan,createdAt}
+let activePatternCat = 'Semua';
+let editingPatternId = null;
+let activeStructPlatform = 'TikTok';
+let composerData = {};   // {segmentLabel: text} untuk platform yg sedang aktif
+let composerPlatformForData = null; // platform terakhir yang datanya ada di composerData
+
+/* Struktur script per platform — timing & catatan sesuai praktik lapangan.
+   Kalau platform custom tidak terdaftar, pakai STRUCT_DEFAULT sebagai fallback. */
+const PLATFORM_STRUCTURES = {
+  'TikTok': {
+    note: 'Format vertikal pendek (umumnya 15–60 detik). Algoritma TikTok sangat sensitif ke completion rate & rewatch, jadi 3 detik pertama menentukan hidup-matinya video.',
+    steps: [
+      {label:'Hook', waktu:'0–3 detik', desc:'WAJIB kuat — tangkap perhatian sebelum orang sempat scroll. Pakai visual mengejutkan, pertanyaan, atau statement kontroversial/relatable.', color:'#E0546B'},
+      {label:'Build', waktu:'detik 3–40', desc:'Isi utama: bangun konteks, cerita, atau demo. Jaga pacing cepat, potong bagian yang lambat/bertele-tele.', color:'#2D7DD2'},
+      {label:'Payoff', waktu:'menjelang akhir', desc:"Momen \"aha\" / klimaks / hasil yang dijanjikan di hook — alasan orang nonton sampai habis.", color:'#7C5CFC'},
+      {label:'CTA', waktu:'3–5 detik terakhir', desc:'Ajakan jelas & singkat: follow, komentar, share, atau klik keranjang.', color:'#2BAE66'}
+    ]
+  },
+  'Instagram': {
+    note: 'Reels lebih dihargai algoritma lewat sinyal Save & Share dibanding Like, dan durasi ideal cenderung lebih pendek dari TikTok — jadi Build harus lebih padat.',
+    steps: [
+      {label:'Hook', waktu:'0–3 detik', desc:'Sama krusialnya seperti TikTok — Reels juga di-cut cepat kalau retensi awal rendah.', color:'#E0546B'},
+      {label:'Build', waktu:'detik 3–25', desc:'Value/isi utama dipadatkan; Reels berperforma baik biasanya lebih pendek (±15–30 detik total).', color:'#2D7DD2'},
+      {label:'Payoff', waktu:'menjelang akhir', desc:'Beri alasan kuat untuk ditonton sampai habis & di-rewatch.', color:'#7C5CFC'},
+      {label:'CTA', waktu:'akhir video', desc:'Fokus ajak Save ("simpan biar nggak lupa") atau Share ke teman — dua sinyal favorit algoritma IG.', color:'#2BAE66'}
+    ]
+  },
+  'YouTube': {
+    note: 'Kalau bikin YouTube Shorts, ikuti pola sama seperti TikTok (Hook 0–3 detik, dst). Struktur di bawah ini untuk video reguler/long-form.',
+    steps: [
+      {label:'Hook', waktu:'0–15 detik', desc:'Cold open: langsung preview hasil/manfaat tanpa intro panjang.', color:'#E0546B'},
+      {label:'Intro Singkat', waktu:'15–30 detik', desc:'Perkenalan singkat + konfirmasi value proposition. Jangan kepanjangan, viewer banyak drop di sini.', color:'#F2B134'},
+      {label:'Build (Isi Utama)', waktu:'beberapa segmen', desc:'Pecah jadi sub-topik. Selipkan retention hook tiap 1–2 menit (mis. "nanti di bagian akhir gue kasih tau...").', color:'#2D7DD2'},
+      {label:'Payoff', waktu:'menjelang akhir', desc:'Puncak konten — insight/hasil utama yang dijanjikan di hook.', color:'#7C5CFC'},
+      {label:'CTA', waktu:'akhir (+ boleh mid-roll)', desc:'Like, subscribe, komentar, arahkan ke video lain. Bisa diselipkan sekali lagi di tengah video.', color:'#2BAE66'}
+    ]
+  },
+  'Facebook': {
+    note: 'Video/Reels FB sering autoplay tanpa suara, jadi hook wajib jalan lewat teks overlay/visual. Audiens FB juga lebih responsif ke ajakan comment & share/tag.',
+    steps: [
+      {label:'Hook', waktu:'0–3 detik', desc:'Pakai text overlay + visual kuat karena banyak ditonton tanpa suara (autoplay muted).', color:'#E0546B'},
+      {label:'Build', waktu:'detik 3–35', desc:'Audiens FB cenderung lebih suka konten naratif/informatif, pacing boleh sedikit lebih santai dari TikTok — tapi tetap jangan bertele-tele.', color:'#2D7DD2'},
+      {label:'Payoff', waktu:'menjelang akhir', desc:'Klimaks/hasil yang menjawab janji di hook.', color:'#7C5CFC'},
+      {label:'CTA', waktu:'akhir video', desc:'Ajak comment, share ke grup, atau tag teman — sinyal yang paling dihargai algoritma FB.', color:'#2BAE66'}
+    ]
+  }
+};
+const STRUCT_DEFAULT = {
+  note: 'Platform ini belum punya panduan khusus — pakai kerangka umum berikut, lalu sesuaikan durasi & gaya dengan kebiasaan audiensmu di platform tersebut.',
+  steps: [
+    {label:'Hook', waktu:'0–3 detik', desc:'Tangkap perhatian di awal sebelum penonton pergi.', color:'#E0546B'},
+    {label:'Build', waktu:'isi utama', desc:'Sampaikan value/cerita utama, sesuaikan panjangnya dengan format platform.', color:'#2D7DD2'},
+    {label:'Payoff', waktu:'menjelang akhir', desc:'Kasih klimaks/hasil yang menjawab janji di hook.', color:'#7C5CFC'},
+    {label:'CTA', waktu:'penutup', desc:'Ajakan jelas: follow, komentar, share, atau aksi lain yang kamu mau.', color:'#2BAE66'}
+  ]
+};
+
 /* ============ UTIL ============ */
 function fmtISO(d){
   const y=d.getFullYear(), m=String(d.getMonth()+1).padStart(2,'0'), day=String(d.getDate()).padStart(2,'0');
@@ -795,6 +1296,17 @@ function parseISO(s){
 }
 function todayISO(){ return fmtISO(new Date()); }
 function uid(){ return 'sk_'+Date.now()+'_'+Math.floor(Math.random()*1000); }
+function pid(){ return 'pt_'+Date.now()+'_'+Math.floor(Math.random()*1000); }
+function addDays(d, n){ const r = new Date(d); r.setDate(r.getDate()+n); return r; }
+function getMonday(d){
+  const r = new Date(d);
+  const day = r.getDay(); // 0=Min..6=Sab
+  const diff = day===0 ? -6 : 1-day; // geser ke Senin
+  r.setDate(r.getDate()+diff);
+  r.setHours(0,0,0,0);
+  return r;
+}
+function daysBetween(a,b){ return Math.round((b-a)/86400000); }
 function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 // Jaga-jaga: kalau ada data lama tersimpan sebagai ISO date (mis. "1899-12-30T09:00:00.000Z"),
 // tetap tampilkan sebagai jam HH:mm, bukan string mentah.
@@ -849,6 +1361,95 @@ function getAppsScriptUrl(){
 }
 function saveAppsScriptUrl(val){
   try{ localStorage.setItem('skGasUrl', (val||'').trim()); }catch(e){}
+}
+
+/* ---- Tracker settings (target mingguan + batas review) ---- */
+function loadTrackerSettings(){
+  try{
+    const t = parseInt(localStorage.getItem('skWeeklyTarget'), 10);
+    WEEKLY_TARGET = (!isNaN(t) && t>0) ? t : 5;
+  }catch(e){ WEEKLY_TARGET = 5; }
+  try{
+    const r = parseInt(localStorage.getItem('skReviewThreshold'), 10);
+    REVIEW_THRESHOLD_DAYS = (!isNaN(r) && r>0) ? r : 2;
+  }catch(e){ REVIEW_THRESHOLD_DAYS = 2; }
+}
+function saveTrackerSettings(target, reviewDays){
+  WEEKLY_TARGET = target>0 ? target : 5;
+  REVIEW_THRESHOLD_DAYS = reviewDays>0 ? reviewDays : 2;
+  try{
+    localStorage.setItem('skWeeklyTarget', String(WEEKLY_TARGET));
+    localStorage.setItem('skReviewThreshold', String(REVIEW_THRESHOLD_DAYS));
+  }catch(e){}
+}
+
+/* ---- Pola Script: kategori + data (cache lokal; sinkron ke sheet "PolaScript" & "Pengaturan") ---- */
+function loadPatternCats(){
+  try{
+    const raw = localStorage.getItem('skPatternCats');
+    PATTERN_CATS = raw ? JSON.parse(raw) : DEFAULT_PATTERN_CATS.slice();
+    if(!Array.isArray(PATTERN_CATS) || !PATTERN_CATS.length) PATTERN_CATS = DEFAULT_PATTERN_CATS.slice();
+  }catch(e){ PATTERN_CATS = DEFAULT_PATTERN_CATS.slice(); }
+}
+function savePatternCats(){
+  try{ localStorage.setItem('skPatternCats', JSON.stringify(PATTERN_CATS)); }catch(e){}
+}
+const SEED_PATTERNS = [
+  {kategori:'Hook', judul:"Hook 'Stop Scroll' 3 Detik", isi:"Kamu masih [masalah/kebiasaan umum audiens]? Coba ini deh...", catatan:'Untuk 0–3 detik pertama, langsung tunjuk masalah yang relate.'},
+  {kategori:'Hook', judul:'Hook Angka/Fakta Mengejutkan', isi:"90% orang nggak tau kalau [fakta mengejutkan tentang topik]. Ini penjelasannya:", catatan:'Cocok untuk konten edukasi/tips di 3 detik pertama.'},
+  {kategori:'Hook', judul:'Hook Pertanyaan Retoris', isi:"Pernah nggak sih kamu [situasi umum yang relate]? Ternyata ini alasannya...", catatan:'Bikin penonton mengangguk dalam hati sebelum lanjut nonton.'},
+  {kategori:'Hook', judul:'Hook Kontroversial/Bantah Mitos', isi:"[Mitos/anggapan umum] itu SALAH. Faktanya...", catatan:'Pancing rasa penasaran dengan membalik ekspektasi audiens.'},
+  {kategori:'Hook', judul:'Hook Cerita Personal', isi:"Dulu aku juga [pengalaman/masalah yang sama dengan audiens], sampai akhirnya...", catatan:'Bangun koneksi emosional lewat pengalaman yang relatable.'},
+  {kategori:'Hook', judul:'Hook Cliffhanger di Awal', isi:"Di akhir video ini kamu bakal tau cara [hasil yang diinginkan] tanpa [hal yang biasanya jadi hambatan].", catatan:'Janjikan hasil spesifik agar penonton bertahan sampai akhir.'},
+  {kategori:'Build', judul:'Build Problem-Agitate-Solve', isi:"1) Sebutkan masalah [masalah]\n2) Perbesar dampaknya kalau dibiarkan\n3) Kasih solusi singkat + cara pakai produk/tips", catatan:'Isi utama sebelum masuk payoff, jaga pacing tetap cepat.'},
+  {kategori:'Build', judul:'Build Step-by-Step', isi:"Langkah 1: [langkah pertama]\nLangkah 2: [langkah kedua]\nLangkah 3: [langkah ketiga]", catatan:'Cocok untuk konten tutorial/how-to, gunakan teks di layar untuk tiap langkah.'},
+  {kategori:'Build', judul:'Build Sebelum vs Sesudah', isi:"Sebelum: [kondisi/hasil lama]\nSesudah pakai [produk/cara]: [kondisi/hasil baru]", catatan:'Perkuat dengan visual perbandingan berdampingan di layar.'},
+  {kategori:'Build', judul:'Build List/Rangkuman Poin', isi:"Ada [jumlah] hal yang perlu kamu tau soal [topik]:\n1) [poin 1]\n2) [poin 2]\n3) [poin 3]", catatan:'Format listicle, gampang diikuti dan sering di-save penonton.'},
+  {kategori:'Build', judul:'Build Bantah Keberatan', isi:"Mungkin kamu mikir [keberatan umum]. Tapi sebenarnya [jawab keberatan itu dengan fakta/manfaat].", catatan:'Cocok buat konten jualan, atasi alasan orang ragu sebelum closing.'},
+  {kategori:'Payoff', judul:'Payoff Reveal Hasil', isi:"Dan hasilnya... [tunjukkan hasil/bukti nyata sesuai janji di hook]", catatan:'Momen klimaks menjelang akhir — jawab janji yang dibuka di hook.'},
+  {kategori:'Payoff', judul:'Payoff Testimoni/Bukti Sosial', isi:"Ini bukan cuma kata aku — [jumlah] orang udah buktiin: [contoh singkat testimoni/hasil].", catatan:'Perkuat kepercayaan dengan bukti dari orang lain, bukan klaim sendiri.'},
+  {kategori:'Payoff', judul:'Payoff Rangkuman Manfaat', isi:"Jadi intinya, dengan [produk/cara ini] kamu dapat [manfaat 1], [manfaat 2], dan [manfaat 3] sekaligus.", catatan:'Tutup bagian isi dengan menegaskan ulang value utama sebelum CTA.'},
+  {kategori:'Payoff', judul:'Payoff Plot Twist', isi:"Ternyata masalahnya bukan di [asumsi awal], tapi di [penyebab sebenarnya] — dan ini cara benerinnya.", catatan:'Bikin momen "aha" yang bikin penonton mikir ulang soal topik itu.'},
+  {kategori:'CTA', judul:"CTA Soft — Ajak Komen", isi:"Kalau kamu pernah ngalamin ini juga, komen 'RELATE' di bawah ya!", catatan:'3–5 detik terakhir. Untuk konten yang butuh engagement, bukan hard-sell.'},
+  {kategori:'CTA', judul:'CTA Follow untuk Part Selanjutnya', isi:"Mau tau kelanjutannya? Follow biar nggak ketinggalan part 2!", catatan:'Untuk konten series/multi-part.'},
+  {kategori:'CTA', judul:'CTA Hard Sell — Checkout Sekarang', isi:"Stok terbatas! Klik keranjang kuning sekarang sebelum kehabisan.", catatan:'Untuk konten jualan langsung dengan urgensi, cocok saat live/promo.'},
+  {kategori:'CTA', judul:'CTA Save/Bookmark', isi:"Save video ini biar nggak lupa pas kamu butuh nanti!", catatan:'Cocok untuk konten edukasi/tips yang sifatnya referensi jangka panjang.'},
+  {kategori:'CTA', judul:'CTA Share ke Teman', isi:"Tag atau kirim ke temen kamu yang butuh baca ini juga!", catatan:'Dorong distribusi organik, cocok untuk konten yang related ke banyak orang.'},
+  {kategori:'CTA', judul:'CTA Tanya Balik/Polling', isi:"Menurut kamu mana yang lebih [opsi A] atau [opsi B]? Tulis di komentar!", catatan:'Pancing diskusi di kolom komentar untuk naikkan engagement rate.'},
+  {kategori:'Hook', judul:'Hook Perbandingan Angka', isi:"Orang yang [kebiasaan A] beda jauh sama yang [kebiasaan B] — bedanya bisa sampai [angka/perbandingan].", catatan:'Cocok untuk konten edukasi berbasis data/statistik ringan.'},
+  {kategori:'Hook', judul:"Hook 'POV'", isi:"POV: kamu [situasi spesifik yang relate dengan audiens]...", catatan:'Gaya storytelling ala POV, bikin penonton merasa jadi karakter utama.'},
+  {kategori:'Hook', judul:'Hook Peringatan/Awas', isi:"STOP! Jangan [kesalahan umum] sebelum kamu tau ini...", catatan:'Nada mendesak untuk konten yang menyelamatkan audiens dari kesalahan/kerugian.'},
+  {kategori:'Build', judul:'Build Mitos vs Fakta', isi:"Mitos: [anggapan salah tentang topik]\nFakta: [kebenaran sebenarnya + alasan singkat]", catatan:'Format kontras jelas, mudah dicerna dan sering dishare.'},
+  {kategori:'Build', judul:'Build Bandingkan Opsi A vs B', isi:"Opsi A ([nama opsi]): [kelebihan/kekurangan singkat]\nOpsi B ([nama opsi]): [kelebihan/kekurangan singkat]", catatan:'Cocok untuk konten review/perbandingan produk atau metode.'},
+  {kategori:'Build', judul:'Build Behind The Scenes', isi:"Ini proses di balik layar [proses/produk]: [tunjukkan tahapan yang jarang dilihat orang]", catatan:'Bangun trust dan rasa penasaran lewat transparansi proses.'},
+  {kategori:'Payoff', judul:'Payoff Angka/Data Konkret', isi:"Hasilnya: [angka/metrik spesifik] dalam [jangka waktu] — ini buktinya.", catatan:'Angka konkret lebih meyakinkan daripada klaim umum seperti "banyak" atau "cepat".'},
+  {kategori:'Payoff', judul:'Payoff Ajakan Refleksi', isi:"Jadi coba deh cek lagi, apakah kamu juga [kondisi terkait masalah di hook]? Kalau iya, saatnya [ajakan bertindak].", catatan:'Jembatan lembut dari isi ke CTA lewat pertanyaan reflektif.'},
+  {kategori:'CTA', judul:'CTA Klik Link di Bio', isi:"Info lengkap & cara order ada di link bio ya!", catatan:'Untuk konten yang ngarahin ke landing page/katalog di luar platform.'},
+  {kategori:'CTA', judul:'CTA DM untuk Info', isi:"Mau tau lebih detail? DM aku kata '[kata kunci]' ya!", catatan:'Cocok untuk funnel closing personal via chat, kata kunci mempermudah filter DM.'},
+  {kategori:'CTA', judul:'CTA Urgensi Waktu Terbatas', isi:"Promo ini cuma sampai [tanggal/jam] — jangan sampai kelewatan!", catatan:'Tekankan batas waktu jelas supaya audiens bertindak sekarang, bukan nanti.'},
+  {kategori:'CTA', judul:'CTA Ajak Duet/Stitch', isi:"Coba juga cara ini, terus duet/stitch video kamu di sini ya!", catatan:'Dorong konten user-generated dan jangkauan tambahan lewat fitur duet/stitch.'}
+];
+function loadPatterns(){
+  try{
+    const raw = localStorage.getItem('skPatterns');
+    PATTERNS = raw ? JSON.parse(raw) : [];
+  }catch(e){ PATTERNS = []; }
+}
+function savePatterns(){
+  try{ localStorage.setItem('skPatterns', JSON.stringify(PATTERNS)); }catch(e){}
+}
+// Tambahkan pola contoh dari SEED_PATTERNS yang judulnya belum ada di library —
+// tidak menghapus/menimpa pola yang sudah dibuat atau diedit sendiri.
+function mergeSeedPatterns(){
+  const existingTitles = new Set(PATTERNS.map(p=> String(p.judul||'').trim().toLowerCase()));
+  const additions = SEED_PATTERNS
+    .filter(p=> !existingTitles.has(p.judul.trim().toLowerCase()))
+    .map(p=> ({id:pid(), ...p, createdAt:new Date().toISOString()}));
+  if(additions.length){
+    PATTERNS = PATTERNS.concat(additions);
+    savePatterns();
+  }
+  return additions;
 }
 
 /* ============ SIDEBAR: FILTERS + STATS ============ */
@@ -912,6 +1513,9 @@ function refreshPlatformUI(){
   renderPlatformFilters();
   renderPlatformSelect();
   renderPlatformManageList();
+  renderStructPlatformFilters();
+  const patternEl = document.getElementById('patternView');
+  if(patternEl && patternEl.style.display !== 'none') renderStructTimeline();
 }
 function renderPlatformManageList(){
   const box = document.getElementById('platformManageList');
@@ -1044,6 +1648,413 @@ function renderCalendar(){
     grid.appendChild(cell);
   }
 }
+
+/* ============ PELACAK MINGGUAN ============ */
+function renderWeekly(){
+  const monday = getMonday(weekAnchor);
+  const sunday = addDays(monday, 6);
+  const todayStr = todayISO();
+  const days = Array.from({length:7}, (_,i)=> addDays(monday, i));
+
+  const sameMonth = monday.getMonth()===sunday.getMonth() && monday.getFullYear()===sunday.getFullYear();
+  document.getElementById('weekLabel').textContent = sameMonth
+    ? `${monday.getDate()} – ${sunday.getDate()} ${BULAN[monday.getMonth()]} ${monday.getFullYear()}`
+    : `${monday.getDate()} ${BULAN[monday.getMonth()]} – ${sunday.getDate()} ${BULAN[sunday.getMonth()]} ${sunday.getFullYear()}`;
+  const inThisWeek = todayStr >= fmtISO(monday) && todayStr <= fmtISO(sunday);
+  document.getElementById('weekTodayNote').textContent = inThisWeek ? 'Minggu ini' : (fmtISO(sunday) < todayStr ? 'Minggu lalu' : 'Minggu mendatang');
+
+  // ---- grid harian ----
+  const grid = document.getElementById('weekGrid');
+  grid.innerHTML = days.map(d=>{
+    const dateStr = fmtISO(d);
+    const items = filteredScriptsFor(dateStr);
+    return `
+      <div class="week-col ${dateStr===todayStr?'today':''}">
+        <div class="wc-head">
+          <div class="wc-dow">${HARI[d.getDay()].slice(0,3)}</div>
+          <div class="wc-date">${d.getDate()} ${BULAN[d.getMonth()].slice(0,3)}</div>
+        </div>
+        <div class="wc-items">
+          ${items.length ? items.map(it=>`
+            <div class="wc-badge" style="background:${STATUS_COLOR[it.status]||'#94A3B8'}" data-open="${dateStr}">
+              ${it.jam?`<span class="t">${esc(fmtJam(it.jam))}</span>`:''}<span class="jt">${esc(it.judul)}</span>
+            </div>`).join('') : `<div class="wc-empty">Kosong</div>`}
+        </div>
+        <button class="wc-add" data-open="${dateStr}">＋ tambah</button>
+      </div>
+    `;
+  }).join('');
+  grid.querySelectorAll('[data-open]').forEach(el=> el.onclick = ()=> openDrawer(el.dataset.open));
+
+  // ---- pace / progress ----
+  const weekItems = SCRIPTS.filter(s=> s.tanggal >= fmtISO(monday) && s.tanggal <= fmtISO(sunday));
+  const actual = weekItems.filter(s=> s.status==='Tayang').length;
+  const target = WEEKLY_TARGET;
+  let daysElapsed;
+  if(todayStr < fmtISO(monday)) daysElapsed = 0;
+  else if(todayStr > fmtISO(sunday)) daysElapsed = 7;
+  else daysElapsed = daysBetween(monday, new Date(todayStr+'T00:00:00')) + 1;
+  const expected = Math.round((target * daysElapsed / 7) * 10) / 10;
+
+  document.getElementById('paceActual').textContent = actual;
+  const pct = target>0 ? Math.min(100, Math.round(actual/target*100)) : 0;
+  const fill = document.getElementById('paceBarFill');
+  fill.style.width = pct+'%';
+
+  const chip = document.getElementById('paceChip');
+  const chipText = document.getElementById('paceChipText');
+  const caption = document.getElementById('paceCaption');
+  fill.className = 'pace-bar-fill';
+  chip.className = 'pace-status-chip';
+
+  if(daysElapsed===0){
+    fill.classList.add('ok'); chip.classList.add('ok');
+    chipText.textContent = 'Minggu Mendatang';
+    caption.textContent = `Target ${target} tayang minggu ini.`;
+  } else if(actual >= expected){
+    fill.classList.add('ok'); chip.classList.add('ok');
+    chipText.textContent = 'Sesuai Jadwal';
+    caption.textContent = `${actual}/${target} tayang · sesuai pace (perkiraan ${expected} sampai hari ini).`;
+  } else if(actual >= expected*0.6){
+    fill.classList.add('warn'); chip.classList.add('warn');
+    chipText.textContent = 'Lampu Kuning';
+    caption.textContent = `${actual}/${target} tayang · agak tertinggal dari perkiraan ${expected} sampai hari ini.`;
+  } else {
+    fill.classList.add('danger'); chip.classList.add('danger');
+    chipText.textContent = 'Tertinggal';
+    caption.textContent = `${actual}/${target} tayang · jauh di bawah perkiraan ${expected} sampai hari ini.`;
+  }
+
+  renderWarnings(daysElapsed, expected, actual);
+}
+
+function renderWarnings(daysElapsed, expected, actual){
+  const box = document.getElementById('warnList');
+  const todayStr = todayISO();
+  const tomorrowStr = fmtISO(addDays(new Date(todayStr+'T00:00:00'), 1));
+  const warnings = [];
+
+  // 1) Overdue: sudah lewat tanggal, belum Tayang/Ditolak
+  const overdue = SCRIPTS.filter(s=> s.tanggal && s.tanggal < todayStr && s.status!=='Tayang' && s.status!=='Ditolak');
+  if(overdue.length){
+    warnings.push({level:'merah', ic:'⛔', text:`<b>${overdue.length} script terlambat</b> — sudah lewat tanggal posting tapi belum berstatus Tayang. Contoh: ${esc(overdue.slice(0,2).map(s=>s.judul).join(', '))}${overdue.length>2?', dll':''}.`});
+  }
+
+  // 2) Besok belum ada jadwal
+  const tomorrowItems = SCRIPTS.filter(s=> s.tanggal===tomorrowStr && s.status!=='Ditolak');
+  if(tomorrowItems.length===0){
+    warnings.push({level:'kuning', ic:'🟡', text:`Belum ada script yang dijadwalkan untuk <b>besok (${tomorrowStr})</b>. Isi kalender supaya konten tidak bolong.`});
+  }
+
+  // 3) Review kelamaan
+  const stuck = SCRIPTS.filter(s=>{
+    if(s.status!=='Review') return false;
+    const ref = s.updatedAt || s.createdAt;
+    if(!ref) return false;
+    const d = daysBetween(new Date(ref), new Date());
+    return d >= REVIEW_THRESHOLD_DAYS;
+  });
+  if(stuck.length){
+    warnings.push({level:'kuning', ic:'🟡', text:`<b>${stuck.length} script</b> masih berstatus Review lebih dari ${REVIEW_THRESHOLD_DAYS} hari. Contoh: ${esc(stuck.slice(0,2).map(s=>s.judul).join(', '))}${stuck.length>2?', dll':''}. Segera cek/approve.`});
+  }
+
+  // 4) Pace mingguan
+  if(daysElapsed>0){
+    if(actual < expected*0.6){
+      warnings.push({level:'merah', ic:'📉', text:`Progres tayang minggu ini <b>jauh di bawah target</b> (${actual}/${WEEKLY_TARGET}, perkiraan ${expected} sampai hari ini). Butuh kejar cepat.`});
+    } else if(actual < expected){
+      warnings.push({level:'kuning', ic:'🟡', text:`Progres tayang minggu ini <b>sedikit tertinggal</b> dari pace (${actual}/${WEEKLY_TARGET}, perkiraan ${expected} sampai hari ini).`});
+    }
+  }
+
+  if(!warnings.length){
+    box.innerHTML = `<div class="warn-item hijau"><div class="wi-ic">✅</div><div class="wi-text">Semua aman — tidak ada peringatan saat ini. Pertahankan ritmenya!</div></div>`;
+    return;
+  }
+  const order = {merah:0, kuning:1, hijau:2};
+  warnings.sort((a,b)=> order[a.level]-order[b.level]);
+  box.innerHTML = warnings.map(w=> `<div class="warn-item ${w.level}"><div class="wi-ic">${w.ic}</div><div class="wi-text">${w.text}</div></div>`).join('');
+}
+
+/* ============ STRUKTUR SCRIPT PER PLATFORM ============ */
+function renderStructPlatformFilters(){
+  const box = document.getElementById('structPlatformFilters');
+  if(!box) return;
+  const list = PLATFORMS.length ? PLATFORMS : Object.keys(PLATFORM_STRUCTURES);
+  if(!list.includes(activeStructPlatform)) activeStructPlatform = list[0];
+  box.innerHTML = list.map(p=>`
+    <button class="lp-pill ${activeStructPlatform===p?'active':''}" data-splat="${esc(p)}">${esc(p)}</button>
+  `).join('');
+  box.querySelectorAll('[data-splat]').forEach(btn=>{
+    btn.onclick = ()=>{ activeStructPlatform = btn.dataset.splat; renderStructPlatformFilters(); renderStructTimeline(); };
+  });
+}
+function renderStructTimeline(){
+  const wrap = document.getElementById('structTimeline');
+  const noteEl = document.getElementById('structNote');
+  if(!wrap) return;
+  const struct = PLATFORM_STRUCTURES[activeStructPlatform] || STRUCT_DEFAULT;
+  wrap.innerHTML = struct.steps.map((s,i)=>`
+    <div class="struct-step" style="background:linear-gradient(160deg, ${s.color}, ${s.color}CC);">
+      <div class="ss-idx">Segmen ${i+1}</div>
+      <div class="ss-label">${esc(s.label)}</div>
+      <div class="ss-time">⏱ ${esc(s.waktu)}</div>
+      <div class="ss-desc">${esc(s.desc)}</div>
+    </div>
+  `).join('');
+  noteEl.textContent = '💡 ' + struct.note;
+  renderComposer();
+}
+
+/* ---- Susun Script (composer) ---- */
+function matchPatternRole(label){
+  const l = label.toLowerCase();
+  if(l.includes('hook')) return 'Hook';
+  if(l.includes('build')) return 'Build';
+  if(l.includes('payoff')) return 'Payoff';
+  if(l.includes('cta')) return 'CTA';
+  return null;
+}
+function currentStruct(){
+  return PLATFORM_STRUCTURES[activeStructPlatform] || STRUCT_DEFAULT;
+}
+function renderComposer(){
+  const box = document.getElementById('composerFields');
+  if(!box) return;
+  const struct = currentStruct();
+  if(composerPlatformForData !== activeStructPlatform){
+    composerData = {}; // ganti platform -> struktur segmen beda, mulai bersih
+    composerPlatformForData = activeStructPlatform;
+  }
+  document.getElementById('composerPlatformLabel').textContent = activeStructPlatform;
+
+  box.innerHTML = struct.steps.map((s,i)=>{
+    const role = matchPatternRole(s.label);
+    const options = role ? PATTERNS.filter(p=>p.kategori===role) : [];
+    return `
+      <div class="composer-seg">
+        <div class="cs-head">
+          <div class="cs-title">
+            <span class="cs-dot" style="background:${s.color}"></span>
+            <span class="cs-label">${i+1}. ${esc(s.label)}</span>
+            <span class="cs-time">⏱ ${esc(s.waktu)}</span>
+          </div>
+          ${options.length ? `
+            <select class="cs-insert" data-seg="${esc(s.label)}">
+              <option value="">＋ sisipkan pola ${esc(role)}...</option>
+              ${options.map(p=>`<option value="${esc(p.id)}">${esc(p.judul)}</option>`).join('')}
+            </select>` : ''}
+        </div>
+        <textarea class="cs-text" data-seg="${esc(s.label)}" placeholder="Tulis isi ${esc(s.label).toLowerCase()} di sini..." style="min-height:${role==='Build'?170:110}px;">${esc(composerData[s.label]||'')}</textarea>
+      </div>
+    `;
+  }).join('');
+
+  box.querySelectorAll('.cs-text').forEach(ta=>{
+    ta.oninput = ()=>{ composerData[ta.dataset.seg] = ta.value; updateComposerPreview(); };
+  });
+  box.querySelectorAll('.cs-insert').forEach(sel=>{
+    sel.onchange = ()=>{
+      if(!sel.value) return;
+      const p = PATTERNS.find(x=>x.id===sel.value);
+      if(!p) return;
+      const ta = box.querySelector(`.cs-text[data-seg="${CSS.escape(sel.dataset.seg)}"]`);
+      if(ta){
+        ta.value = ta.value ? (ta.value + '\n' + p.isi) : p.isi;
+        composerData[sel.dataset.seg] = ta.value;
+        updateComposerPreview();
+      }
+      sel.value = '';
+    };
+  });
+  updateComposerPreview();
+}
+function composeFullScript(){
+  const struct = currentStruct();
+  const parts = struct.steps.map(s=>{
+    const isi = (composerData[s.label] || '').trim();
+    return `[${s.label.toUpperCase()} — ${s.waktu}]\n${isi || '(belum diisi)'}`;
+  });
+  return parts.join('\n\n');
+}
+function updateComposerPreview(){
+  const el = document.getElementById('composerPreview');
+  if(el) el.textContent = composeFullScript();
+}
+document.getElementById('btnCopyComposed').onclick = async ()=>{
+  try{ await navigator.clipboard.writeText(composeFullScript()); toast('✅ Script lengkap disalin ke clipboard'); }
+  catch(e){ toast('❌ Gagal menyalin'); }
+};
+document.getElementById('btnSaveComposed').onclick = async ()=>{
+  const judul = document.getElementById('cJudul').value.trim();
+  const tanggal = document.getElementById('cTanggal').value;
+  if(!judul){ toast('Judul script wajib diisi'); return; }
+  if(!tanggal){ toast('Tanggal posting wajib diisi'); return; }
+  if(!PLATFORMS.includes(activeStructPlatform)){ toast('Platform ini belum ada di daftar Platform — tambahkan dulu di Pengaturan'); return; }
+
+  const data = {
+    judul,
+    penulis: document.getElementById('cPenulis').value.trim(),
+    platform: activeStructPlatform,
+    status: 'Draft',
+    tanggal,
+    jam: document.getElementById('cJam').value || '09:00',
+    catatan: composeFullScript()
+  };
+  const id = uid();
+  const now = new Date().toISOString();
+  SCRIPTS.push({id, ...data, createdAt:now, updatedAt:now});
+  saveLocalCache();
+  refreshAll();
+  toast('✅ Script tersimpan ke Kalender');
+
+  const res = await pushToSheet({op:'create', id, ...data});
+  if(getAppsScriptUrl()) renderConnBanner(res==='ok' ? 'ok' : 'warn');
+
+  // reset form composer
+  document.getElementById('cJudul').value = '';
+  document.getElementById('cPenulis').value = '';
+  document.getElementById('cTanggal').value = '';
+  document.getElementById('cJam').value = '09:00';
+  renderComposer();
+
+  switchTab('cal');
+  openDrawer(tanggal);
+};
+
+/* ============ POLA SCRIPT (library) ============ */
+function renderPatternCatFilters(){
+  const box = document.getElementById('patternCatFilters');
+  const cats = ['Semua', ...PATTERN_CATS];
+  box.innerHTML = cats.map(c=>`
+    <button class="lp-pill ${activePatternCat===c?'active':''}" data-cat="${esc(c)}">${esc(c)}</button>
+  `).join('');
+  box.querySelectorAll('.lp-pill').forEach(btn=>{
+    btn.onclick = ()=>{ activePatternCat = btn.dataset.cat; renderPatternCatFilters(); renderPatternGrid(); };
+  });
+}
+function renderPatternCatSelect(){
+  const sel = document.getElementById('pKategori');
+  const current = sel.value;
+  sel.innerHTML = PATTERN_CATS.map(c=>`<option>${esc(c)}</option>`).join('');
+  if(PATTERN_CATS.includes(current)) sel.value = current;
+}
+function renderPatternGrid(){
+  const grid = document.getElementById('patternGrid');
+  const list = PATTERNS.filter(p=> activePatternCat==='Semua' || p.kategori===activePatternCat);
+  if(!list.length){
+    grid.innerHTML = `<div class="pattern-empty">Belum ada pola script${activePatternCat!=='Semua'?` di kategori "${esc(activePatternCat)}"`:''}.<br>Klik <b>＋ Tambah Pola</b> untuk menyimpan hook, struktur, atau CTA favoritmu.</div>`;
+    return;
+  }
+  grid.innerHTML = list.map(p=>`
+    <div class="pattern-card">
+      <span class="pc-cat">${esc(p.kategori)}</span>
+      <div class="pc-title">${esc(p.judul)}</div>
+      <div class="pc-body">${esc(p.isi)}</div>
+      ${p.catatan?`<div class="pc-note">💡 ${esc(p.catatan)}</div>`:''}
+      <div class="pc-actions">
+        <button class="mini-btn" data-copy="${esc(p.id)}">📋 Salin</button>
+        <button class="mini-btn" data-edit="${esc(p.id)}">✏️ Edit</button>
+        <button class="mini-btn danger" data-del="${esc(p.id)}">🗑️ Hapus</button>
+      </div>
+    </div>
+  `).join('');
+  grid.querySelectorAll('[data-copy]').forEach(b=> b.onclick = async ()=>{
+    const p = PATTERNS.find(x=>x.id===b.dataset.copy);
+    if(!p) return;
+    try{ await navigator.clipboard.writeText(p.isi); toast('✅ Pola disalin ke clipboard'); }
+    catch(e){ toast('❌ Gagal menyalin'); }
+  });
+  grid.querySelectorAll('[data-edit]').forEach(b=> b.onclick = ()=> openPatternDrawer(b.dataset.edit));
+  grid.querySelectorAll('[data-del]').forEach(b=> b.onclick = async ()=>{
+    if(!confirm('Hapus pola script ini?')) return;
+    const delId = b.dataset.del;
+    PATTERNS = PATTERNS.filter(p=>p.id!==delId);
+    savePatterns();
+    renderPatternGrid();
+    renderComposer();
+    toast('Pola dihapus');
+    await pushToSheet({type:'pattern', op:'delete', id:delId});
+  });
+}
+function resetPatternForm(){
+  editingPatternId = null;
+  document.getElementById('patternFormTitle').textContent = '➕ Tambah Pola Script';
+  document.getElementById('btnSavePattern').textContent = 'Simpan Pola';
+  document.getElementById('pId').value = '';
+  document.getElementById('pJudul').value = '';
+  document.getElementById('pIsi').value = '';
+  document.getElementById('pCatatan').value = '';
+  document.getElementById('pKategoriBaru').value = '';
+  renderPatternCatSelect();
+  if(activePatternCat!=='Semua') document.getElementById('pKategori').value = activePatternCat;
+}
+function openPatternDrawer(id){
+  document.getElementById('patternOverlay').classList.add('open');
+  if(id){
+    const p = PATTERNS.find(x=>x.id===id);
+    if(!p) return;
+    editingPatternId = id;
+    document.getElementById('patternFormTitle').textContent = '✏️ Edit Pola Script';
+    document.getElementById('btnSavePattern').textContent = 'Update Pola';
+    document.getElementById('pId').value = p.id;
+    renderPatternCatSelect();
+    document.getElementById('pKategori').value = p.kategori;
+    document.getElementById('pKategoriBaru').value = '';
+    document.getElementById('pJudul').value = p.judul;
+    document.getElementById('pIsi').value = p.isi;
+    document.getElementById('pCatatan').value = p.catatan || '';
+  } else {
+    resetPatternForm();
+  }
+}
+function closePatternDrawer(){
+  document.getElementById('patternOverlay').classList.remove('open');
+  resetPatternForm();
+}
+document.getElementById('btnAddPattern').onclick = ()=> openPatternDrawer(null);
+document.getElementById('patternDrawerClose').onclick = closePatternDrawer;
+document.getElementById('btnCancelPattern').onclick = closePatternDrawer;
+document.getElementById('patternOverlay').addEventListener('click', (e)=>{
+  if(e.target.id === 'patternOverlay') closePatternDrawer();
+});
+document.getElementById('patternForm').addEventListener('submit', async function(e){
+  e.preventDefault();
+  const judul = document.getElementById('pJudul').value.trim();
+  const isi = document.getElementById('pIsi').value.trim();
+  if(!judul || !isi){ toast('Judul dan isi pola wajib diisi'); return; }
+  const kategoriBaru = document.getElementById('pKategoriBaru').value.trim();
+  let kategori = document.getElementById('pKategori').value;
+  if(kategoriBaru){
+    kategori = kategoriBaru;
+    if(!PATTERN_CATS.some(c=>c.toLowerCase()===kategori.toLowerCase())){
+      PATTERN_CATS.push(kategori);
+      savePatternCats();
+      renderPatternCatFilters();
+      pushToSheet({type:'settings', op:'set', key:'patternCats', value: JSON.stringify(PATTERN_CATS)});
+    }
+  }
+  const catatan = document.getElementById('pCatatan').value.trim();
+
+  let payload;
+  if(editingPatternId){
+    const idx = PATTERNS.findIndex(p=>p.id===editingPatternId);
+    if(idx>-1) PATTERNS[idx] = {...PATTERNS[idx], kategori, judul, isi, catatan};
+    toast('Pola diperbarui');
+    payload = {type:'pattern', op:'update', id:editingPatternId, kategori, judul, isi, catatan};
+  } else {
+    const newId = pid();
+    const createdAt = new Date().toISOString();
+    PATTERNS.push({id:newId, kategori, judul, isi, catatan, createdAt});
+    toast('Pola ditambahkan');
+    payload = {type:'pattern', op:'create', id:newId, kategori, judul, isi, catatan, createdAt};
+  }
+  savePatterns();
+  renderPatternGrid();
+  renderComposer();
+  closePatternDrawer();
+  await pushToSheet(payload);
+});
 
 /* ============ DRAWER (day detail + form) ============ */
 function openDrawer(dateStr){
@@ -1202,6 +2213,8 @@ function refreshAll(){
   refreshPenulisDatalist();
   renderTicker();
   renderDailyList();
+  const weeklyEl = document.getElementById('weeklyView');
+  if(weeklyEl && weeklyEl.style.display !== 'none') renderWeekly();
   const cnt = document.getElementById('localDataCount');
   if(cnt) cnt.textContent = SCRIPTS.length + ' script tersimpan di perangkat ini.';
 }
@@ -1277,19 +2290,51 @@ document.getElementById('dayOverlay').addEventListener('click', (e)=>{
 });
 
 /* ============ TABS ============ */
+const TAB_CRUMBS = {
+  cal: 'Klik salah satu tanggal untuk lihat / tambah script konten hari itu',
+  weekly: 'Pantau progres tayang minggu ini & peringatan lampu kuning',
+  pattern: 'Simpan pola hook, struktur, dan CTA yang biasa dipakai',
+  settings: 'Hubungkan dashboard ke Google Sheets kamu sendiri'
+};
 function switchTab(tab){
   document.getElementById('calendarView').style.display = tab==='cal' ? 'block' : 'none';
+  document.getElementById('weeklyView').style.display = tab==='weekly' ? 'block' : 'none';
+  document.getElementById('patternView').style.display = tab==='pattern' ? 'block' : 'none';
   document.getElementById('settingsView').style.display = tab==='settings' ? 'block' : 'none';
   document.getElementById('tabCalBtn').classList.toggle('active', tab==='cal');
+  document.getElementById('tabWeeklyBtn').classList.toggle('active', tab==='weekly');
+  document.getElementById('tabPatternBtn').classList.toggle('active', tab==='pattern');
   document.getElementById('tabSettingsBtn').classList.toggle('active', tab==='settings');
-  document.getElementById('topCrumb').textContent = tab==='cal'
-    ? 'Klik salah satu tanggal untuk lihat / tambah script konten hari itu'
-    : 'Hubungkan dashboard ke Google Sheets kamu sendiri';
-  if(tab==='settings') document.getElementById('gasUrl').value = getAppsScriptUrl();
+  document.getElementById('topCrumb').textContent = TAB_CRUMBS[tab] || '';
+  if(tab==='settings'){
+    document.getElementById('gasUrl').value = getAppsScriptUrl();
+    document.getElementById('fWeeklyTarget').value = WEEKLY_TARGET;
+    document.getElementById('fReviewThreshold').value = REVIEW_THRESHOLD_DAYS;
+  }
+  if(tab==='weekly') renderWeekly();
+  if(tab==='pattern'){
+    renderStructPlatformFilters(); renderStructTimeline(); renderPatternGrid();
+    const dEl = document.getElementById('cTanggal');
+    if(dEl && !dEl.value) dEl.value = todayISO();
+  }
 }
 document.getElementById('tabCalBtn').onclick = ()=> switchTab('cal');
+document.getElementById('tabWeeklyBtn').onclick = ()=> switchTab('weekly');
+document.getElementById('tabPatternBtn').onclick = ()=> switchTab('pattern');
 document.getElementById('tabSettingsBtn').onclick = ()=> switchTab('settings');
 document.getElementById('btnSettings').onclick = ()=> switchTab('settings');
+
+document.getElementById('prevWeek').onclick = ()=>{ weekAnchor = addDays(getMonday(weekAnchor), -7); renderWeekly(); };
+document.getElementById('nextWeek').onclick = ()=>{ weekAnchor = addDays(getMonday(weekAnchor), 7); renderWeekly(); };
+
+document.getElementById('btnSaveTracker').onclick = async ()=>{
+  const t = parseInt(document.getElementById('fWeeklyTarget').value, 10);
+  const r = parseInt(document.getElementById('fReviewThreshold').value, 10);
+  saveTrackerSettings(isNaN(t)?WEEKLY_TARGET:t, isNaN(r)?REVIEW_THRESHOLD_DAYS:r);
+  toast('✅ Pengaturan tracker disimpan');
+  renderWeekly();
+  await pushToSheet({type:'settings', op:'set', values:{weeklyTarget:String(WEEKLY_TARGET), reviewThreshold:String(REVIEW_THRESHOLD_DAYS)}});
+};
 
 /* ============ SETTINGS: SIMPAN & HUBUNGKAN ============ */
 document.getElementById('btnSaveUrl').onclick = async ()=>{
@@ -1304,7 +2349,7 @@ document.getElementById('btnSaveUrl').onclick = async ()=>{
   msg.innerHTML = '<span style="color:var(--muted);">Menghubungkan &amp; menarik data…</span>';
   const res = await pullFromSheet();
   msg.innerHTML = res === 'ok'
-    ? '<span class="badge ok">Terhubung ✓ — data berhasil ditarik dari sheet "ScriptKonten"</span>'
+    ? '<span class="badge ok">Terhubung ✓ — data script, pola, dan pengaturan berhasil ditarik dari spreadsheet</span>'
     : '<span class="badge warn">URL tersimpan, tapi gagal mengambil data. Cek deployment Apps Script kamu.</span>';
   refreshAll();
   renderConnBanner(res === 'ok' ? 'ok' : 'warn');
@@ -1357,6 +2402,38 @@ async function pullFromSheet(){
     if(json.status==='ok' && Array.isArray(json.items)){
       SCRIPTS = json.items;
       saveLocalCache();
+      if(Array.isArray(json.patterns) && json.patterns.length){
+        PATTERNS = json.patterns;
+        savePatterns();
+      } else if(Array.isArray(json.patterns) && PATTERNS.length){
+        // Sheet "PolaScript" masih kosong tapi sudah ada pola tersimpan lokal
+        // (mis. koneksi pertama kali) -> kirim semua pola lokal ke sheet.
+        PATTERNS.forEach(p=> pushToSheet({type:'pattern', op:'create', id:p.id, kategori:p.kategori, judul:p.judul, isi:p.isi, catatan:p.catatan, createdAt:p.createdAt}));
+      }
+      if(Array.isArray(json.patternCats) && json.patternCats.length){
+        PATTERN_CATS = json.patternCats;
+        savePatternCats();
+      } else if(Array.isArray(json.patternCats) && PATTERN_CATS.length){
+        pushToSheet({type:'settings', op:'set', key:'patternCats', value: JSON.stringify(PATTERN_CATS)});
+      }
+      if(json.settings){
+        const t = json.settings.weeklyTarget;
+        const r = json.settings.reviewThreshold;
+        if(t !== undefined && !isNaN(t)){
+          WEEKLY_TARGET = t;
+        } else {
+          pushToSheet({type:'settings', op:'set', key:'weeklyTarget', value:String(WEEKLY_TARGET)});
+        }
+        if(r !== undefined && !isNaN(r)){
+          REVIEW_THRESHOLD_DAYS = r;
+        } else {
+          pushToSheet({type:'settings', op:'set', key:'reviewThreshold', value:String(REVIEW_THRESHOLD_DAYS)});
+        }
+        try{
+          localStorage.setItem('skWeeklyTarget', String(WEEKLY_TARGET));
+          localStorage.setItem('skReviewThreshold', String(REVIEW_THRESHOLD_DAYS));
+        }catch(e){}
+      }
       return 'ok';
     }
     return 'error';
@@ -1399,7 +2476,7 @@ function renderConnBanner(state){
     return;
   }
   if(state === 'ok'){
-    el.innerHTML = '<div class="conn-banner ok"><span class="cdot"></span> Terhubung ke Google Sheets — setiap script baru / perubahan otomatis dikirim ke sheet "ScriptKonten".</div>';
+    el.innerHTML = '<div class="conn-banner ok"><span class="cdot"></span> Terhubung ke Google Sheets — script, pola script, dan pengaturan tracker otomatis tersinkron.</div>';
     note.textContent = '🟢 Tersambung ke Google Sheet';
   } else {
     el.innerHTML = '<div class="conn-banner warn"><span class="cdot"></span> Tersimpan lokal, tapi gagal sinkron ke spreadsheet. Cek koneksi / URL Apps Script di tab Pengaturan.</div>';
@@ -1411,10 +2488,15 @@ function renderConnBanner(state){
 async function init(){
   loadLocalCache();
   loadPlatforms();
+  loadTrackerSettings();
+  loadPatternCats();
+  loadPatterns();
   renderPlatformFilters();
   renderPlatformSelect();
   renderPlatformManageList();
   renderStatusFilters();
+  renderPatternCatFilters();
+  renderStructPlatformFilters();
   refreshAll();
   document.getElementById('localDataCount').textContent = SCRIPTS.length + ' script tersimpan di perangkat ini.';
   const url = getAppsScriptUrl();
@@ -1425,6 +2507,18 @@ async function init(){
     if(selectedDate) renderDrawer();
   } else {
     renderConnBanner('warn');
+  }
+  // Tambahkan pola contoh baru (yang belum ada di library) setelah data tersinkron,
+  // supaya nggak menimpa pola yang sudah dibuat/diedit sendiri.
+  const newPatterns = mergeSeedPatterns();
+  if(newPatterns.length){
+    if(url){
+      for(const p of newPatterns){
+        await pushToSheet({type:'pattern', op:'create', id:p.id, kategori:p.kategori, judul:p.judul, isi:p.isi, catatan:p.catatan, createdAt:p.createdAt});
+      }
+    }
+    renderPatternCatFilters();
+    renderPatternGrid();
   }
 }
 init();
