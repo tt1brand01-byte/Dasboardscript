@@ -274,8 +274,8 @@ main{max-width:2200px;width:100%;margin:0 auto;padding:24px clamp(16px,2.5vw,48p
 @media (max-width:640px){main{padding:16px 12px 40px}}
 
 #tcamp>thead th,#rows>tr:not(.sub)>td{padding-left:6px;padding-right:6px}
-td input.rp{width:112px}
-td input.n.rp{min-width:104px}
+td input.rp{width:120px;padding-left:6px;padding-right:6px}
+td input.n.rp{min-width:112px}
 #rows>tr:not(.sub) .adv{min-width:320px}
 main{padding-left:clamp(16px,2vw,32px);padding-right:clamp(16px,2vw,32px)}
 @media (max-width:640px){main{padding-left:12px;padding-right:12px}}
@@ -313,6 +313,23 @@ main{padding-left:clamp(16px,2vw,32px);padding-right:clamp(16px,2vw,32px)}
 #tcmp .tag{display:inline-block;margin-left:6px;padding:0 7px;border-radius:999px;background:var(--acc);color:var(--bg);font-size:11px;font-weight:600;vertical-align:1px}
 .dl{display:block;margin-top:2px;font-size:11.5px;font-weight:600;white-space:nowrap}
 .dl.up{color:var(--grn)}.dl.dn{color:var(--red)}.dl.nu{color:var(--mut)}
+
+.sst{margin:12px 0 0;padding:10px 14px;border-radius:8px;font-size:14px;line-height:1.45;background:var(--grybg);color:var(--gry)}
+.sst[data-state="ok"]{background:var(--grnbg);color:var(--grn)}
+.sst[data-state="err"]{background:var(--redbg);color:var(--red)}
+.sst[data-state="busy"]{background:var(--blubg);color:var(--blu)}
+#sypush[disabled],#sypull[disabled]{opacity:.6}
+
+.sg{display:flex;flex-direction:column;gap:14px}
+.sg .f2{display:flex;flex-direction:column;gap:5px;font-size:13px;color:var(--mut);font-weight:500}
+.sg input[type=url],.sg input[type=password],.sg input[type=text]{width:100%;height:40px;padding:0 10px;font-size:14px}
+.sg .kr{display:flex;flex-wrap:wrap;gap:8px}
+.sg .kr input{flex:1 1 220px;width:auto}
+.sg .kr button{height:40px;padding:0 14px}
+.sg .chk{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--ink)}
+.sg .chk input{width:18px;height:18px;margin:0}
+.sg .sst{margin:0}
+#syst{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px}
 </style>
 </head>
 <body>
@@ -444,18 +461,15 @@ main{padding-left:clamp(16px,2vw,32px);padding-right:clamp(16px,2vw,32px)}
 </section>
 
 <section class="pane" id="p-sambung" hidden>
-<div class="settings">
-<label>URL Web App (berakhiran /exec)<input id="syurl" type="url" placeholder="https://script.google.com/macros/s/.../exec"></label>
-<label>Kunci<input id="sykey" type="password" autocomplete="off"></label>
-<button id="sygen">Buat kunci acak</button>
-<button id="sykeyshow">Tampilkan kunci</button>
+<div class="sg">
+<label class="f2">URL Web App (berakhiran /exec)<input id="syurl" type="url" placeholder="https://script.google.com/macros/s/.../exec" autocomplete="off"></label>
+<div class="f2"><label for="sykey">Kunci</label>
+<div class="kr"><input id="sykey" type="password" autocomplete="off"><button id="sykeyshow" type="button">Tampilkan kunci</button><button id="sygen" type="button">Buat kunci acak</button></div></div>
+<label class="chk"><input id="syauto" type="checkbox"> Simpan otomatis setelah ada perubahan</label>
+<div class="kr"><button class="pri" id="sypush" type="button">Simpan ke Sheets</button><button id="sypull" type="button">Muat dari Sheets</button></div>
+<div id="syst2" class="sst" data-state="idle" role="status" aria-live="polite">Belum tersambung</div>
+<p class="note" style="margin:0">Muat dulu sebelum mengisi bila beberapa orang memakai log ini. Data terakhir yang disimpan menimpa data sebelumnya.</p>
 </div>
-<div class="settings">
-<label><span><input id="syauto" type="checkbox"> Simpan otomatis setelah ada perubahan</span></label>
-<button class="pri" id="sypush">Simpan ke Sheets</button>
-<button id="sypull">Muat dari Sheets</button>
-</div>
-<p class="note">Muat dulu sebelum mengisi bila beberapa orang memakai log ini. Data terakhir yang disimpan menimpa data sebelumnya.</p>
 </section>
 </dialog>
 <script type="text/plain" id="gsSrc">// Log Maintenance GMV Max - Google Apps Script (Web App)
@@ -563,29 +577,33 @@ const SK="gmvmax_sync_v1";
 let SY=(function(){try{return JSON.parse(localStorage.getItem(SK))||{}}catch(e){return{}}})();
 let tmr=null,quiet=false;
 function saveSY(){try{localStorage.setItem(SK,JSON.stringify(SY))}catch(e){}}
-function setStatus(s){const el=document.getElementById("syst");if(el)el.textContent=s}
+function setStatus(s,st){const a=document.getElementById("syst"),b=document.getElementById("syst2");if(a){a.textContent=s;a.title=s}if(b){b.textContent=s;b.dataset.state=st||"idle"}}
+let syBusy=false;
+function whyErr(e){const m=String(e&&e.message||e);return /JSON|Unexpected token|<!DOCTYPE/i.test(m)?"Jawaban bukan dari Apps Script. Pastikan URL berakhiran /exec, Who has access = Anyone, dan sudah Deploy (New version) setelah kode diganti.":/Failed to fetch|NetworkError|Load failed/i.test(m)?"Tidak bisa menghubungi Google. Periksa internet dan URL Web App (harus berakhiran /exec).":m}
 function hhmm(){return new Date().toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-digit"})}
 function save(){S.updatedAt=Date.now();try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}
 if(!quiet&&SY.url&&SY.auto){clearTimeout(tmr);setStatus("Menunggu untuk disimpan...");tmr=setTimeout(push,3000)}}
 function syUrl(){return SY.url+(SY.url.indexOf("?")<0?"?":"&")+"key="+encodeURIComponent(SY.key||"")+"&t="+Date.now()}
-async function push(){if(!SY.url){setStatus("Isi URL Web App dulu");return}
-setStatus("Menyimpan...");const ts=S.updatedAt||Date.now();S.updatedAt=ts;
+async function push(){if(syBusy)return;syBusy=true;try{await push0()}finally{syBusy=false}}
+async function push0(){if(!SY.url){setStatus("Isi URL Web App dulu","err");return}
+setStatus("Menyimpan ke Sheets...","busy");const ts=S.updatedAt||Date.now();S.updatedAt=ts;
 try{await fetch(SY.url,{method:"POST",mode:"no-cors",body:JSON.stringify({key:SY.key||"",state:S})});
-let ok=false,why="";try{const r=await fetch(syUrl());const j=await r.json();ok=!!j&&j.updatedAt===ts;if(j&&j.error)why=j.error}catch(e){}
-setStatus(ok?"Tersimpan di Sheets "+hhmm():why?"Ditolak: "+why:"Terkirim "+hhmm()+" (belum bisa diverifikasi, cek Sheets)")}
-catch(e){setStatus("Gagal menyimpan: "+e.message)}}
-async function pull(){if(!SY.url){setStatus("Isi URL Web App dulu");return}
-setStatus("Memuat...");
+let ok=false,why="",ex="";try{const r=await fetch(syUrl());const j=await r.json();ok=!!j&&j.updatedAt===ts;if(j&&j.error)why=j.error}catch(e){ex=whyErr(e)}
+setStatus(ok?"Tersimpan di Sheets "+hhmm():why?"Ditolak: "+why+". Kunci di sini harus sama dengan kunci di kode Apps Script.":ex?"Terkirim, tetapi tidak bisa diverifikasi. "+ex:"Terkirim "+hhmm()+" (belum bisa diverifikasi, cek Sheets)",ok?"ok":"err")}
+catch(e){setStatus("Gagal menyimpan: "+whyErr(e),"err")}}
+async function pull(){if(syBusy)return;syBusy=true;try{await pull0()}finally{syBusy=false}}
+async function pull0(){if(!SY.url){setStatus("Isi URL Web App dulu","err");return}
+setStatus("Memuat dari Sheets...","busy");
 try{const r=await fetch(syUrl());const j=await r.json();
-if(j.error){setStatus("Ditolak: "+j.error);return}
-if(j.empty||!j.months){setStatus("Sheets masih kosong. Klik Simpan ke Sheets dulu.");return}
+if(j.error){setStatus("Ditolak: "+j.error+". Kunci di sini harus sama dengan kunci di kode Apps Script.","err");return}
+if(j.empty||!j.months){setStatus("Sheets masih kosong. Klik Simpan ke Sheets dulu.","err");return}
 quiet=true;S=norm(j);if(!S.months[S.cur])S.cur=Object.keys(S.months).sort().pop();
-try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}quiet=false;init();document.getElementById("syban").hidden=true;setStatus("Dimuat dari Sheets "+hhmm())}
-catch(e){quiet=false;setStatus("Gagal memuat: "+e.message+". Buka file ini dari komputer atau hosting Anda, bukan dari tampilan di dalam claude.ai.")}}
+try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}quiet=false;init();document.getElementById("syban").hidden=true;setStatus("Dimuat dari Sheets "+hhmm(),"ok")}
+catch(e){quiet=false;setStatus("Gagal memuat: "+whyErr(e),"err")}}
 async function syncBoot(){const g=id=>document.getElementById(id);g("syurl").value=SY.url||"";g("sykey").value=SY.key||"";g("syauto").checked=!!SY.auto;
 if(!SY.url)return;
 try{const r=await fetch(syUrl());const j=await r.json();
-if(j&&j.months&&(j.updatedAt||0)>(S.updatedAt||0)){g("syban").hidden=false;setStatus("Ada data lebih baru di Sheets")}else setStatus("Tersambung. Data lokal sudah terbaru")}
+if(j&&j.months&&(j.updatedAt||0)>(S.updatedAt||0)){g("syban").hidden=false;setStatus("Ada data lebih baru di Sheets","ok")}else setStatus("Tersambung. Data lokal sudah terbaru","ok")}
 catch(e){setStatus("Belum tersambung ke Sheets")}}
 function save_unused(){}
 const $=id=>document.getElementById(id);
