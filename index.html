@@ -478,6 +478,13 @@ main{padding-left:clamp(16px,2vw,32px);padding-right:clamp(16px,2vw,32px)}
 const SECRET = "GANTI-DENGAN-KUNCI-ANDA";
 const CHUNK = 40000;
 const DATA_SHEET = "_data";
+// Kosongkan bila script dibuat lewat Extensions > Apps Script di dalam Sheets.
+// Isi dengan ID spreadsheet (bagian URL di antara /d/ dan /edit) bila script dibuat dari script.google.com.
+const SHEET_ID = "";
+
+function ss_() {
+  return SHEET_ID ? SpreadsheetApp.openById(SHEET_ID) : SpreadsheetApp.getActive();
+}
 
 function doGet(e) {
   if (((e && e.parameter && e.parameter.key) || "") !== SECRET) return out_({ error: "kunci salah" });
@@ -490,6 +497,7 @@ function doPost(e) {
     lock.waitLock(20000);
     const body = JSON.parse(e.postData.contents);
     if ((body.key || "") !== SECRET) return out_({ ok: false, error: "kunci salah" });
+    backup_();
     write_(body.state);
     report_(body.state);
     return out_({ ok: true, updatedAt: body.state.updatedAt });
@@ -505,7 +513,7 @@ function out_(obj) {
 }
 
 function sheet_(name) {
-  const ss = SpreadsheetApp.getActive();
+  const ss = ss_();
   return ss.getSheetByName(name) || ss.insertSheet(name);
 }
 
@@ -520,10 +528,80 @@ function write_(state) {
 }
 
 function read_() {
-  const sh = SpreadsheetApp.getActive().getSheetByName(DATA_SHEET);
-  if (!sh || sh.getLastRow() < 1) return { empty: true };
-  const vals = sh.getRange(1, 1, sh.getLastRow(), 1).getValues();
-  return JSON.parse(vals.map(function (r) { return r[0]; }).join(""));
+  const sh = ss_().getSheetByName(DATA_SHEET);
+  if (sh && sh.getLastRow() >= 1) {
+    const txt = sh.getRange(1, 1, sh.getLastRow(), 1).getValues().map(function (r) { return r[0]; }).join("");
+    if (txt) return JSON.parse(txt);
+  }
+  return fromTabs_(); // _data kosong atau tidak ada: bangun dari tab Kampanye, Kreatif, Catatan, Event
+}
+
+// Membaca data dari tab biasa (yang diisi atau ditempel manual) agar bisa ditarik ke halaman.
+function fromTabs_() {
+  const ss = ss_(), tz = ss.getSpreadsheetTimeZone();
+  const rd = function (name) {
+    const s = ss.getSheetByName(name);
+    return s && s.getLastRow() > 1 ? s.getRange(2, 1, s.getLastRow() - 1, s.getLastColumn()).getValues() : [];
+  };
+  const mk = function (v) { return v instanceof Date ? Utilities.formatDate(v, tz, "yyyy-MM") : String(v).trim().slice(0, 7); };
+  const dt = function (v) { return v instanceof Date ? Utilities.formatDate(v, tz, "yyyy-MM-dd") : String(v == null ? "" : v).trim(); };
+  const nm = function (v) {
+    if (typeof v === "number") return v;
+    return parseFloat(String(v == null ? "" : v).replace(/[^\d,-]/g, "").replace(",", ".")) || 0;
+  };
+  const nd = function (v) { // angka desimal (Target ROI)
+    if (typeof v === "number") return v;
+    return parseFloat(String(v == null ? "" : v).replace(",", ".")) || 0;
+  };
+  const months = {};
+  const get = function (k) {
+    if (!months[k]) {
+      const d = new Date(+k.slice(0, 4), +k.slice(5, 7), 0).getDate();
+      months[k] = { hari: d, dari: k + "-01", sampai: k + "-" + ("0" + d).slice(-2), chk: {}, logs: [], rows: [] };
+    }
+    return months[k];
+  };
+  rd("Kampanye").forEach(function (r) {
+    if (r[0] === "" || r[3] === "") return;
+    const m = get(mk(r[0]));
+    m.dari = dt(r[1]) || m.dari;
+    m.sampai = dt(r[2]) || m.sampai;
+    m.rows.push({
+      id: Math.random().toString(36).slice(2, 8), n: String(r[3]), mulai: dt(r[4]),
+      pro: String(r[5]).toLowerCase() === "ya", t: nd(r[6]), c: nm(r[7]), o: nm(r[8]), r: nm(r[9]),
+      p: r[12] === "" ? "" : nm(r[12]), k: r[13] === "" ? "" : nm(r[13]), vids: []
+    });
+  });
+  rd("Kreatif").forEach(function (r) {
+    if (r[0] === "" || r[2] === "") return;
+    const x = get(mk(r[0])).rows.filter(function (y) { return y.n === String(r[1]); })[0];
+    if (x) x.vids.push({ d1: dt(r[3]), d2: dt(r[4]), n: String(r[2]), c: nm(r[5]), o: nm(r[6]), r: nm(r[7]), s: String(r[9]).toLowerCase() === "ya" });
+  });
+  rd("Catatan").forEach(function (r) {
+    if (r[0] !== "") get(mk(r[0])).logs.push({ d: dt(r[1]), k: String(r[2]), a: String(r[3]), w: String(r[4]) });
+  });
+  const keys = Object.keys(months).sort();
+  if (!keys.length) return { empty: true };
+  const out = { fromTabs: true, cur: keys[keys.length - 1], set: { be: 2.5, low: 3.7, mid: 4.0 }, months: months, updatedAt: 0 };
+  const ev = rd("Event").filter(function (r) { return r[0] !== ""; }).map(function (r) {
+    return { n: String(r[0]), a: dt(r[1]), b: dt(r[2]), c: String(r[3]) };
+  });
+  if (ev.length) out.events = ev;
+  return out;
+}
+
+// Cadangan: bila _data belum ada tetapi tab sudah berisi data manual, salin dulu sebelum ditimpa saat Simpan pertama.
+function backup_() {
+  const ss = ss_(), d = ss.getSheetByName(DATA_SHEET);
+  if (d && d.getLastRow() >= 1 && d.getRange(1, 1).getValue() !== "") return;
+  ["Kampanye", "Kreatif", "Catatan", "Event"].forEach(function (n) {
+    const s = ss.getSheetByName(n);
+    if (!s || s.getLastRow() < 2) return;
+    const bn = n + " (cadangan)";
+    const old = ss.getSheetByName(bn);
+    if (old) ss.deleteSheet(old);
+    s.copyTo(ss).setName(bn);
+  });
 }
 
 function put_(name, header, rows) {
@@ -554,7 +632,7 @@ function report_(state) {
   put_("Kreatif", ["Bulan", "Kampanye", "Video", "Dari", "Sampai", "Biaya", "Order", "Pendapatan", "ROI", "Bebas klaim penyakit"], vid);
   put_("Catatan", ["Bulan", "Tanggal", "Kampanye", "Perubahan", "Alasan"], log);
   put_("Event", ["Event", "Mulai", "Selesai", "Catatan"], (state.events || []).map(function (e) { return [e.n, e.a || "", e.b || "", e.c || ""]; }));
-  const ss = SpreadsheetApp.getActive();
+  const ss = ss_();
   const d = ss.getSheetByName(DATA_SHEET);
   if (d && ss.getSheets().length > 1) d.hideSheet();
 }
@@ -597,8 +675,8 @@ setStatus("Memuat dari Sheets...","busy");
 try{const r=await fetch(syUrl());const j=await r.json();
 if(j.error){setStatus("Ditolak: "+j.error+". Kunci di sini harus sama dengan kunci di kode Apps Script.","err");return}
 if(j.empty||!j.months){setStatus("Sheets masih kosong. Klik Simpan ke Sheets dulu.","err");return}
-quiet=true;S=norm(j);if(!S.months[S.cur])S.cur=Object.keys(S.months).sort().pop();
-try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}quiet=false;init();document.getElementById("syban").hidden=true;setStatus("Dimuat dari Sheets "+hhmm(),"ok")}
+const ft=!!j.fromTabs,keepSet=S.set;delete j.fromTabs;quiet=true;S=norm(j);if(ft){if(keepSet)S.set=keepSet;S.updatedAt=Date.now()}if(!S.months[S.cur])S.cur=Object.keys(S.months).sort().pop();
+try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}quiet=false;init();document.getElementById("syban").hidden=true;setStatus((ft?"Dimuat dari tab Sheets ":"Dimuat dari Sheets ")+hhmm(),"ok")}
 catch(e){quiet=false;setStatus("Gagal memuat: "+whyErr(e),"err")}}
 async function syncBoot(){const g=id=>document.getElementById(id);g("syurl").value=SY.url||"";g("sykey").value=SY.key||"";g("syauto").checked=!!SY.auto;
 if(!SY.url)return;
