@@ -202,7 +202,7 @@ td input.n.rp{min-width:112px}
 .ctl input,.ctl select{width:100%;height:38px;font-size:14px;padding:0 10px}
 .ctl input[type=date]{padding:0 8px}
 .ctl #hari{width:100%!important;text-align:center;background:transparent;border-style:dashed;color:var(--mut)}
-.ctl .g3{align-items:end;display:grid;grid-template-columns:1fr 1fr 72px;gap:10px}
+.ctl .g3{align-items:end;display:grid;grid-template-columns:1fr 1fr 92px;gap:10px}
 .ctl .g3.r3{grid-template-columns:repeat(3,1fr)}
 .ctl .btns{display:flex;gap:8px;margin-top:auto}
 .ctl .btns button{min-height:38px;flex:1 1 auto;padding:6px 10px;font-size:13.5px;line-height:1.25;white-space:nowrap}
@@ -303,7 +303,10 @@ main{padding-left:clamp(16px,2vw,32px);padding-right:clamp(16px,2vw,32px)}
 .cx-b{fill-opacity:.9}
 .cx-b.sel{stroke:var(--ink);stroke-width:1.5}
 .cx-v.up{fill:var(--grn)}.cx-v.dn{fill:var(--red)}.cx-v.nu{fill:var(--blu)}
-#tcmp{min-width:760px}
+#tcmp{min-width:760px;table-layout:fixed;width:100%}
+#tcmp th:first-child,#tcmp td:first-child{width:25%}
+#tcmp td small{font-weight:400;margin-top:3px}
+.dl i.pd{font-style:normal;font-weight:500;margin-left:3px;opacity:.85}
 #tcmp thead th{background:var(--deep);color:#fff;border-bottom:0}
 #tcmp tbody tr{cursor:pointer}
 #tcmp tbody tr.sel>td{background:color-mix(in srgb,var(--acc) 11%,var(--panel));font-weight:500}
@@ -330,6 +333,96 @@ main{padding-left:clamp(16px,2vw,32px);padding-right:clamp(16px,2vw,32px)}
 .sg .chk input{width:18px;height:18px;margin:0}
 .sg .sst{margin:0}
 #syst{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px}
+
+/* ===== Tampilan lebih besar dan rapi ===== */
+body{font-size:16.5px;line-height:1.6}
+main{max-width:1840px;padding-top:28px}
+h1{font-size:30px}
+h2{font-size:22px;margin:40px 0 12px}
+p.sub{font-size:16px;max-width:75ch}
+.help,.note{font-size:14.5px}
+button,input,select{font-size:15.5px}
+
+/* Panel atas */
+.ctl{margin-top:20px;border-radius:14px}
+.ctl .cg{padding:24px 28px;gap:16px}
+.ctl h3{font-size:15.5px}
+.ctl .f{font-size:14px;gap:6px}
+.ctl input,.ctl select{height:48px;font-size:16.5px;padding:0 12px;border-radius:8px}
+.ctl .btns button{min-height:48px;font-size:15.5px;border-radius:8px}
+.ctl .hint{font-size:13.5px}
+.ctl #hari{font-size:15.5px;padding:0 4px}
+.ctl .g3{grid-template-columns:1fr 1fr 118px;gap:12px}
+@media (max-width:860px){.ctl .g3:not(.r3){grid-template-columns:1fr 1fr}.ctl .g3:not(.r3) .f:last-child #hari{width:110px!important}}
+
+/* Kartu ringkasan */
+.totals{grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin-top:18px}
+.totals>div{padding:18px 22px;border-radius:14px;gap:6px}
+.totals>div>span{font-size:14.5px}
+.totals b{font-size:30px;line-height:1.15;letter-spacing:-.01em}
+.totals b .chip{font-size:26px!important;padding:2px 14px}
+
+/* Checklist dan kalender */
+details.ck{border-radius:14px}
+details.ck>summary{font-size:17px;padding:16px 22px}
+details.ck>summary span{font-size:14.5px}
+
+/* Tabel umum */
+.scroll{border-radius:14px}
+table{font-size:15.5px}
+th{font-size:14px}
+th,td{padding:10px 10px}
+td small{font-size:13px}
+td input{height:42px}
+td input.rp,td input.n.rp{width:140px}
+td input.n{width:108px}
+td input.s{width:80px}
+td input.nm{min-width:190px}
+td input[type=date]{width:156px}
+.chip{font-size:15px;padding:2px 10px}
+
+/* Tabel perbandingan bulan */
+#tcmp{font-size:17.5px}
+#tcmp thead th{font-size:15px;padding:15px 20px;font-weight:600}
+#tcmp td{padding:18px 20px}
+#tcmp tfoot td{padding:18px 20px}
+#tcmp td:first-child{font-size:18px}
+#tcmp .tag{font-size:12.5px;padding:1px 9px}
+#tcmp td small{font-size:14px;color:var(--mut)}
+#tcmp .chip{font-size:16.5px;padding:2px 12px}
+.dl{font-size:13.5px;margin-top:4px}
+
+/* Grafik */
+.chart{padding:18px 22px 14px}
+.chart h3{font-size:17px}
+.chart .cs{font-size:14px;margin:4px 0 8px}
+.cx-t{font-size:12.5px}.cx-v{font-size:12.5px}
+.cmpbar .cl{font-size:15px}
+.seg button{padding:8px 16px}
+
+/* Tabel kampanye: tetap ringkas supaya muat tanpa geser */
+#tcamp{font-size:15px}
+#tcamp th{font-size:13.5px}
+#tcamp td input{height:40px;font-size:15px}
+#tcamp td input.rp,#tcamp td input.n.rp{width:122px;min-width:0}
+#tcamp td input.n{width:92px}
+#tcamp td input[type=date]{width:140px}
+#tcamp td input.nm{min-width:170px}
+#tcamp td:nth-last-child(3),#tcamp thead tr:nth-child(2) th:nth-last-child(3){white-space:normal;min-width:230px;max-width:290px;line-height:1.4}
+#tcamp th{white-space:normal;line-height:1.25;vertical-align:bottom}
+#tcamp th,#tcamp td{padding-left:5px;padding-right:5px}
+#tcamp td input.rp,#tcamp td input.n.rp{width:112px}
+#tcamp td input.n{width:76px}
+#tcamp td input[type=date]{width:130px;padding:0 4px}
+#tcamp td input.nm{min-width:150px}
+#tcamp td:nth-last-child(3),#tcamp thead tr:nth-child(2) th:nth-last-child(3){min-width:210px;max-width:250px}
+#tcamp td input.rp,#tcamp td input.n.rp{width:132px;font-size:14.5px}
+
+/* Kartu ringkasan: 3 kolom di laptop, 6 kolom di layar lebar, 2 kolom di HP */
+.totals{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media (min-width:1500px){.totals{grid-template-columns:repeat(6,minmax(0,1fr))}}
+@media (max-width:560px){.totals{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.totals>div{padding:14px 16px}}
+.totals b{font-size:clamp(22px,1.7vw,30px);overflow-wrap:anywhere}
 </style>
 </head>
 <body>
@@ -410,6 +503,7 @@ main{padding-left:clamp(16px,2vw,32px);padding-right:clamp(16px,2vw,32px)}
 <thead><tr><th>Bulan</th><th class="num">Biaya</th><th class="num">Order</th><th class="num">Pendapatan</th><th class="num">ROI</th><th class="num">Biaya/order</th><th class="num">Belanja/hari</th></tr></thead>
 <tbody id="cmp"></tbody><tfoot id="cmpf"></tfoot></table></div>
 <p class="help">Panah hijau berarti membaik, merah berarti memburuk, abu-abu netral (Biaya iklan dan Belanja/hari hanya menunjukkan perubahan, bukan baik atau buruk). Untuk Biaya/order, turun berarti membaik.</p>
+<p class="help">Bulan yang belum penuh ditandai &quot;x dari y hari&quot;. Biaya, Order, dan Pendapatan pada bulan itu dibandingkan per hari (ditandai /hari), bukan total, supaya adil. Belanja/hari dihitung dari jumlah hari yang sudah berjalan sampai hari ini.</p>
 
 </main>
 
@@ -697,9 +791,12 @@ const mLabel=k=>{const a=k.split("-").map(Number);return new Date(a[0],a[1]-1,1)
 const d2=s=>new Date(s+"T00:00:00");
 function rangeOf(m,key){const a=m.dari||key+"-01";let b=m.sampai;if(!b){const n=Math.min(m.hari||daysIn(key),daysIn(key));b=key+"-"+String(n).padStart(2,"0")}return[a,b]}
 function spanDays(a,b){return Math.max(1,Math.round((d2(b)-d2(a))/86400000)+1)}
+function hariUI(){const m=M(),f=monthDays(m,S.cur),e=effDays(m,S.cur),h=$("hari");h.value=e<f?e+" dari "+f:String(f);h.title=e<f?"Hari yang sudah berjalan sampai hari ini, dari "+f+" hari pada periode data":"Jumlah hari pada periode data"}
 function monthDays(m,key){const r=rangeOf(m,key);return spanDays(r[0],r[1])}
-function daysFor(x){const r=rangeOf(M(),S.cur);let a=r[0];if(x&&x.mulai&&x.mulai>a)a=x.mulai;return spanDays(a,r[1])}
 function localToday(){return new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,10)}
+function clipEnd(a,b){const td=localToday();return td>=a&&td<b?td:b}
+function effDays(m,key){const r=rangeOf(m,key);return spanDays(r[0],clipEnd(r[0],r[1]))}
+function daysFor(x){const r=rangeOf(M(),S.cur);let a=r[0];if(x&&x.mulai&&x.mulai>a)a=x.mulai;return spanDays(a,clipEnd(r[0],r[1]))}
 function ageOf(x){if(!x.mulai)return null;const r=rangeOf(M(),S.cur),td=localToday(),ref=td<r[1]?td:r[1];return Math.max(0,Math.round((d2(ref)-d2(x.mulai))/86400000)+1)}
 function lastChange(name){let best=null;(M().logs||[]).forEach(l=>{if(l.k===name&&l.d&&(!best||l.d>best))best=l.d});if(!best)return null;return Math.floor((Date.now()-new Date(best+"T00:00:00").getTime())/86400000)}
 function calc(x){const D=daysFor(x),c=num(x.c),o=num(x.o),r=num(x.r),t=num(x.t),p=num(x.p);
@@ -771,17 +868,17 @@ function renderLogs(){$("logs").innerHTML=(M().logs||[]).map((l,i)=>`<tr><td><in
 function totals(m){let c=0,o=0,r=0;m.rows.forEach(x=>{c+=num(x.c);o+=num(x.o);r+=num(x.r)});return{c:c,o:o,r:r,roi:c>0?r/c:0}}
 function chipCls(roi,c){const s=S.set;return!c?"gry":roi<s.low?"red":roi<s.mid?"yel":"grn"}
 function renderTotals(){const t=totals(M());
-$("totals").innerHTML=`<div><b>${rp(t.c)}</b><span>Biaya iklan</span></div><div><b>${t.o.toLocaleString("id-ID")}</b><span>Order</span></div><div><b>${rp(t.r)}</b><span>Pendapatan kotor</span></div><div><b><span class="chip ${chipCls(t.roi,t.c)}" style="font-size:20px">${t.roi.toFixed(2)}</span></b><span>ROI gabungan</span></div><div><b>${t.o?rp(t.c/t.o):"-"}</b><span>Biaya per order</span></div><div><b>${rp(t.c/monthDays(M(),S.cur))}</b><span>Belanja per hari</span></div>`}
+$("totals").innerHTML=`<div><b>${rp(t.c)}</b><span>Biaya iklan</span></div><div><b>${t.o.toLocaleString("id-ID")}</b><span>Order</span></div><div><b>${rp(t.r)}</b><span>Pendapatan kotor</span></div><div><b><span class="chip ${chipCls(t.roi,t.c)}" style="font-size:20px">${t.roi.toFixed(2)}</span></b><span>ROI gabungan</span></div><div><b>${t.o?rp(t.c/t.o):"-"}</b><span>Biaya per order</span></div><div><b>${rp(t.c/effDays(M(),S.cur))}</b><span>Belanja per hari</span></div>`}
 let CMM="r";
-const CM={r:{n:"Pendapatan",g:1,f:rp,v:t=>t.r},c:{n:"Biaya iklan",g:0,f:rp,v:t=>t.c},o:{n:"Order",g:1,f:x=>Math.round(x).toLocaleString("id-ID"),v:t=>t.o},roi:{n:"ROI",g:1,f:x=>x.toFixed(2).replace(".",","),v:t=>t.c>0?t.roi:null},cpo:{n:"Biaya per order",g:-1,f:rp,v:t=>t.o?t.c/t.o:null}};
+const CM={r:{n:"Pendapatan",vol:1,g:1,f:rp,v:t=>t.r},c:{n:"Biaya iklan",vol:1,g:0,f:rp,v:t=>t.c},o:{n:"Order",vol:1,g:1,f:x=>Math.round(x).toLocaleString("id-ID"),v:t=>t.o},roi:{n:"ROI",g:1,f:x=>x.toFixed(2).replace(".",","),v:t=>t.c>0?t.roi:null},cpo:{n:"Biaya per order",g:-1,f:rp,v:t=>t.o?t.c/t.o:null}};
 const cpt=v=>{const a=Math.abs(v),f=(x,u)=>(+x.toFixed(1)).toLocaleString("id-ID")+u;return a>=1e9?f(v/1e9," M"):a>=1e6?f(v/1e6," jt"):a>=1e3?f(v/1e3," rb"):(+v.toFixed(2)).toLocaleString("id-ID")};
 const shortM=k=>mLabel(k).slice(0,3)+" "+k.slice(2,4);
 const pc=(a,b)=>(a==null||b==null||a===0)?null:(b-a)/a*100;
 const pcs=v=>(v>0?"+":"")+(+v.toFixed(1)).toLocaleString("id-ID")+"%";
 const dcls=(v,g)=>g===0?"nu":(v===0?"nu":(g*v>0?"up":"dn"));
-const dl=(v,g)=>v==null?"":`<span class="dl ${dcls(v,g)}">${v>0?"\u25B2":v<0?"\u25BC":"\u2013"} ${pcs(Math.abs(v)).replace("+","")}</span>`;
+const dl=(v,g,sf)=>v==null?"":`<span class="dl ${dcls(v,g)}">${v>0?"\u25B2":v<0?"\u25BC":"\u2013"} ${pcs(Math.abs(v)).replace("+","")}${sf?`<i class="pd">${sf}</i>`:""}</span>`;
 function nice(x){if(!(x>0))return 1;const e=Math.pow(10,Math.floor(Math.log10(x))),f=x/e;return(f<=1?1:f<=2?2:f<=2.5?2.5:f<=5?5:10)*e}
-function cmpData(){return Object.keys(S.months).sort().map(k=>({k:k,t:totals(S.months[k])}))}
+function cmpData(){return Object.keys(S.months).sort().map(k=>{const dn=effDays(S.months[k],k);return{k:k,t:totals(S.months[k]),dn:dn,full:dn>=daysIn(k)}})}
 function lineSvg(d,w){const m=CM[CMM],h=260,L=58,R=18,T=26,B=34,iw=w-L-R,ih=h-T-B,vals=d.map(x=>m.v(x.t)),nn=vals.filter(v=>v!=null);
 if(!nn.length)return'<div class="emp">Belum ada data untuk ditampilkan.</div>';
 const ymax=nice(Math.max.apply(null,nn)*1.08),X=i=>L+(i+.5)*iw/d.length,Y=v=>T+ih*(1-v/ymax);let o=`<svg viewBox="0 0 ${w} ${h}" role="img" aria-label="Grafik garis ${m.n} per bulan">`;
@@ -791,25 +888,27 @@ const pts=[];vals.forEach((v,i)=>{if(v!=null)pts.push([X(i),Y(v),v,i])});
 if(pts.length>1){const ln=pts.map((p,i)=>(i?"L":"M")+p[0].toFixed(1)+" "+p[1].toFixed(1)).join(" ");o+=`<path class="cx-area" d="${ln} L${pts[pts.length-1][0].toFixed(1)} ${Y(0)} L${pts[0][0].toFixed(1)} ${Y(0)} Z"/><path class="cx-line" d="${ln}"/>`}
 pts.forEach(p=>{const k=d[p[3]].k,sel=k===S.cur;if(sel)o+=`<circle class="cx-ring" cx="${p[0]}" cy="${p[1]}" r="9"/>`;o+=`<circle class="cx-dot${sel?" sel":""}" cx="${p[0]}" cy="${p[1]}" r="${sel?5.5:4.5}"><title>${mLabel(k)}: ${m.f(p[2])}</title></circle>`;if(d.length<=10)o+=`<text class="cx-v" x="${p[0]}" y="${p[1]-12}" text-anchor="middle">${cpt(p[2])}</text>`});
 return o+"</svg>"}
-function barSvg(d,w){const m=CM[CMM],h=260,L=58,R=18,T=26,B=34,iw=w-L-R,ih=h-T-B,vals=d.map(x=>m.v(x.t)),gr=vals.map((v,i)=>i?pc(vals[i-1],v):null),nn=gr.filter(v=>v!=null);
+function barSvg(d,w){const m=CM[CMM],h=260,L=58,R=18,T=26,B=34,iw=w-L-R,ih=h-T-B,vals=d.map(x=>m.v(x.t)),pcd=vals.map((v,i)=>!!(i&&m.vol&&(!d[i-1].full||!d[i].full))),gr=vals.map((v,i)=>i?(pcd[i]?pc(vals[i-1]/d[i-1].dn,v/d[i].dn):pc(vals[i-1],v)):null),nn=gr.filter(v=>v!=null);
 if(!nn.length)return'<div class="emp">Perlu data minimal 2 bulan untuk melihat peningkatan.<br>Klik Bulan baru, isi datanya, lalu grafik ini akan muncul.</div>';
 const lo=Math.min(0,Math.min.apply(null,nn)),hi=Math.max(0,Math.max.apply(null,nn)),st=nice(Math.max((hi-lo)/4,1)),lo2=Math.floor(lo/st)*st;let hi2=Math.ceil(hi/st)*st;if(hi2<=lo2)hi2=lo2+st;
 const X=i=>L+(i+.5)*iw/d.length,Y=v=>T+ih*(1-(v-lo2)/(hi2-lo2)),bw=Math.min(54,iw/d.length*.55);let o=`<svg viewBox="0 0 ${w} ${h}" role="img" aria-label="Grafik batang peningkatan ${m.n}">`;
 for(let v=lo2;v<=hi2+1e-9;v+=st){const y=Y(v);o+=`<line class="${Math.abs(v)<1e-9?"cx-zero":"cx-grid"}" x1="${L}" x2="${w-R}" y1="${y}" y2="${y}"/><text class="cx-t" x="${L-8}" y="${y+4}" text-anchor="end">${(+v.toFixed(1)).toLocaleString("id-ID")}%</text>`}
 const step=d.length>12?2:1;d.forEach((x,i)=>{if(i%step===0)o+=`<text class="cx-t" x="${X(i)}" y="${h-10}" text-anchor="middle">${shortM(x.k)}</text>`});
 gr.forEach((g,i)=>{if(g==null)return;const c=dcls(g,m.g),y0=Y(0),y1=Y(g),yy=Math.min(y0,y1),hh=Math.max(Math.abs(y1-y0),1.5),k=d[i].k;
-o+=`<rect class="cx-b ${c}${k===S.cur?" sel":""}" x="${X(i)-bw/2}" y="${yy}" width="${bw}" height="${hh}" rx="3"><title>${mLabel(k)}: ${pcs(g)} dibanding ${mLabel(d[i-1].k)}</title></rect><text class="cx-v ${c}" x="${X(i)}" y="${g>=0?yy-6:yy+hh+13}" text-anchor="middle">${pcs(g)}</text>`});
+o+=`<rect class="cx-b ${c}${k===S.cur?" sel":""}" x="${X(i)-bw/2}" y="${yy}" width="${bw}" height="${hh}" rx="3"><title>${mLabel(k)}: ${pcs(g)}${pcd[i]?" per hari":""} dibanding ${mLabel(d[i-1].k)}</title></rect><text class="cx-v ${c}" x="${X(i)}" y="${g>=0?yy-6:yy+hh+13}" text-anchor="middle">${pcs(g)}</text>`});
 return o+"</svg>"}
 function renderCharts(){const d=cmpData(),m=CM[CMM],e1=$("cmpline");if(!e1)return;const w1=Math.max(300,e1.clientWidth||600),w2=Math.max(300,$("cmpbar").clientWidth||600);
 document.querySelectorAll("#cmpseg button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.cm===CMM)));
-$("cmpt1").textContent=m.n+(d.length<2?" (baru 1 bulan, tambah bulan untuk melihat garis)":"");$("cmpt2").textContent="Perubahan "+m.n+" (%) dari bulan ke bulan"+(m.g===-1?". Turun berarti membaik.":m.g===0?". Warna netral, hanya menunjukkan arah.":".");
+$("cmpt1").textContent=m.n+(d.length<2?" (baru 1 bulan, tambah bulan untuk melihat garis)":"");$("cmpt2").textContent="Perubahan "+m.n+" (%) dari bulan ke bulan"+(m.g===-1?". Turun berarti membaik.":m.g===0?". Warna netral, hanya menunjukkan arah.":".")+(m.vol&&d.some(x=>!x.full)?" Bulan yang belum penuh dibandingkan per hari.":"");
 e1.innerHTML=lineSvg(d,w1);$("cmpbar").innerHTML=barSvg(d,w2)}
 function renderCompare(){const d=cmpData();
-$("cmp").innerHTML=d.map((x,i)=>{const t=x.t,p=i?d[i-1].t:null,k=x.k,pr=p&&p.c>0?p.c/monthDays(S.months[d[i-1].k],d[i-1].k):null,cr=t.c>0?t.c/monthDays(S.months[k],k):null,
-cp0=p&&p.o?p.c/p.o:null,cc=t.o?t.c/t.o:null;
-return`<tr data-m="${k}" class="${k===S.cur?"sel":""}" title="Klik untuk membuka bulan ini"><td>${mLabel(k)}${k===S.cur?'<span class="tag">dipilih</span>':""}</td><td class="num">${rp(t.c)}${p?dl(pc(p.c,t.c),0):""}</td><td class="num">${t.o.toLocaleString("id-ID")}${p?dl(pc(p.o,t.o),1):""}</td><td class="num">${rp(t.r)}${p?dl(pc(p.r,t.r),1):""}</td><td class="num"><span class="chip ${chipCls(t.roi,t.c)}">${t.c>0?t.roi.toFixed(2):"-"}</span>${p&&p.c>0&&t.c>0?dl(pc(p.roi,t.roi),1):""}</td><td class="num">${cc!=null?rp(cc):"-"}${p?dl(pc(cp0,cc),-1):""}</td><td class="num">${cr!=null?rp(cr):"-"}${p?dl(pc(pr,cr),0):""}</td></tr>`}).join("");
-const T=d.reduce((a,x)=>({c:a.c+x.t.c,o:a.o+x.t.o,r:a.r+x.t.r}),{c:0,o:0,r:0}),roi=T.c>0?T.r/T.c:0;
-$("cmpf").innerHTML=d.length>1?`<tr><td>Total ${d.length} bulan</td><td class="num">${rp(T.c)}</td><td class="num">${T.o.toLocaleString("id-ID")}</td><td class="num">${rp(T.r)}</td><td class="num"><span class="chip ${chipCls(roi,T.c)}">${T.c>0?roi.toFixed(2):"-"}</span></td><td class="num">${T.o?rp(T.c/T.o):"-"}</td><td class="num">-</td></tr>`:"";
+$("cmp").innerHTML=d.map((x,i)=>{const t=x.t,p=i?d[i-1]:null,pt=p?p.t:null,k=x.k,pace=!!p&&(!p.full||!x.full),sf=pace?" /hari":"",
+pv=(key,g)=>{if(!p)return"";const a=pt[key],b=t[key];return dl(pace?pc(a/p.dn,b/x.dn):pc(a,b),g,sf)},
+cr=t.c>0?t.c/x.dn:null,pr=pt&&pt.c>0?pt.c/p.dn:null,cp0=pt&&pt.o?pt.c/pt.o:null,cc=t.o?t.c/t.o:null,
+part=x.full?"":`<small>${x.dn} dari ${daysIn(k)} hari</small>`;
+return`<tr data-m="${k}" class="${k===S.cur?"sel":""}" title="Klik untuk membuka bulan ini"><td>${mLabel(k)}${k===S.cur?'<span class="tag">dipilih</span>':""}${part}</td><td class="num">${rp(t.c)}${pv("c",0)}</td><td class="num">${t.o.toLocaleString("id-ID")}${pv("o",1)}</td><td class="num">${rp(t.r)}${pv("r",1)}</td><td class="num"><span class="chip ${chipCls(t.roi,t.c)}">${t.c>0?t.roi.toFixed(2):"-"}</span>${p&&pt.c>0&&t.c>0?dl(pc(pt.roi,t.roi),1):""}</td><td class="num">${cc!=null?rp(cc):"-"}${p?dl(pc(cp0,cc),-1):""}</td><td class="num">${cr!=null?rp(cr):"-"}${p?dl(pc(pr,cr),0):""}</td></tr>`}).join("");
+const T=d.reduce((a,x)=>({c:a.c+x.t.c,o:a.o+x.t.o,r:a.r+x.t.r,dn:a.dn+x.dn}),{c:0,o:0,r:0,dn:0}),roi=T.c>0?T.r/T.c:0;
+$("cmpf").innerHTML=d.length>1?`<tr><td>Total ${d.length} bulan<small>${T.dn} hari</small></td><td class="num">${rp(T.c)}</td><td class="num">${T.o.toLocaleString("id-ID")}</td><td class="num">${rp(T.r)}</td><td class="num"><span class="chip ${chipCls(roi,T.c)}">${T.c>0?roi.toFixed(2):"-"}</span></td><td class="num">${T.o?rp(T.c/T.o):"-"}</td><td class="num">${T.c>0?rp(T.c/T.dn):"-"}</td></tr>`:"";
 renderCharts()}
 document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("#cmpseg button");if(b){CMM=b.dataset.cm;renderCharts();return}
 const r=e.target.closest&&e.target.closest("#cmp tr[data-m]");if(r&&r.dataset.m!==S.cur){S.cur=r.dataset.m;save();init();const h=$("cmp");window.scrollTo({top:window.scrollY});}});
@@ -819,7 +918,7 @@ function ckKey(p,i){return p==="h"?"h"+localToday()+"_"+i:p==="m"?"m"+weekKey()+
 function ckSum(){const m=M(),c=(p,n)=>{let x=0;for(let i=0;i<n;i++)if(m.chk[ckKey(p,i)])x++;return x+"/"+n};$("cksum").textContent="Harian "+c("h",HARIAN.length)+" | Mingguan "+c("m",MINGGUAN.length)+" | Bulanan "+c("b",BULANAN.length)}
 function renderChecks(){const m=M();m.chk=m.chk||{};const mk=(id,arr,p)=>{$(id).innerHTML=arr.map((t,i)=>{const k=ckKey(p,i);return`<li><label><input type="checkbox" data-k="${k}" ${m.chk[k]?"checked":""}><span>${t}</span></label></li>`}).join("")};mk("harian",HARIAN,"h");mk("mingguan",MINGGUAN,"m");mk("bulanan",BULANAN,"b");ckSum()}
 function renderTop(){$("bulan").innerHTML=Object.keys(S.months).sort().map(k=>`<option value="${k}" ${k===S.cur?"selected":""}>${mLabel(k)}</option>`).join("");
-(function(){const m=M(),r=rangeOf(m,S.cur);$("dari").value=r[0];$("sampai").value=r[1];$("hari").value=monthDays(m,S.cur)})();$("be").value=S.set.be;$("low").value=S.set.low;$("mid").value=S.set.mid}
+(function(){const m=M(),r=rangeOf(m,S.cur);$("dari").value=r[0];$("sampai").value=r[1];hariUI()})();$("be").value=S.set.be;$("low").value=S.set.low;$("mid").value=S.set.mid}
 function evDefault(){const c="Perkiraan dari pola 2025. Konfirmasi tanggal dan batas registrasi di Seller Center > Campaign.";
 return[{n:"Gajian Sale + Promo Guncang 10.10",a:"2026-09-25",b:"2026-10-10",c:c},
 {n:"Gajian Sale Oktober + Promo Guncang 11.11",a:"2026-10-24",b:"2026-11-11",c:c},
@@ -856,7 +955,7 @@ if(t.id==="syauto"){SY.auto=t.checked;saveSY();return}
 if(ds.ef!==undefined){const ev=S.events[ds.ei];ev[ds.ef]=t.value;save();evFill(t.closest("tr"),ev);evSum();renderRows();return}
 if(t.id==="bulan"){S.cur=t.value;save();init();return}
 if(t.id==="today"){return}
-if(t.id==="dari"||t.id==="sampai"){m[t.id]=t.value;save();$("hari").value=monthDays(m,S.cur);renderRows();renderTotals();renderCompare();return}
+if(t.id==="dari"||t.id==="sampai"){m[t.id]=t.value;save();hariUI();renderRows();renderTotals();renderCompare();return}
 if(t.id==="be"||t.id==="low"||t.id==="mid"){S.set[t.id]=num(t.value);save();renderRows();renderTotals();renderCompare();return}
 if(ds.f!==undefined){const x=m.rows[ds.i],f=ds.f;x[f]=(f==="n"||f==="mulai")?t.value:f==="pro"?t.checked:(t.value===""?"":num(val(t)));save();fillRow(t.closest("tr"),x);renderTotals();renderCompare();if(f==="n")renderList();return}
 if(ds.vf!==undefined){const v=m.rows[ds.ri].vids[ds.vi],f=ds.vf;v[f]=(f==="n"||f==="d1"||f==="d2")?t.value:f==="s"?t.checked:num(val(t));save();vfill(t.closest("tr"),v);return}
